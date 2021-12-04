@@ -15062,9 +15062,18 @@ function addNovel(novel) {
   });
   fs.copyFileSync(require.main.path + "/assets/banner.jpeg", "novels/".concat(novel, "/banner.jpeg"));
   fs.copyFileSync(require.main.path + "/assets/cover.png", "novels/".concat(novel, "/cover.png"));
+  Object.keys(novelConfigFiles).forEach(function (file) {
+    fs.writeFileSync("novels/".concat(novel, "/") + file, novelConfigFiles[file], "utf-8");
+  });
   fs.writeFileSync(siteFiles().settings, JSON.stringify(dump$2(settings)), "utf-8");
+  console.log("\n  \uD83C\uDF89 you have created a new novel for your site.\n  Go check it out in folder \"novels/".concat(novel, "\"\n  \n  Proceed in configuring novel settings in \"info.yml\" and credit\n  your editors/proofreaders/contributors in \"contributors.yml\". \n  Change the book cover and banner while you're at it!\n  \n"));
   process.exit();
 }
+var novelConfigFiles = {
+  "synopsis.md": "This is an example of novel synopsis. This will appear in novel page later.\n  \nYou can use markdown format here. Happy writing!",
+  "info.yml": "title: Awesome Fantasy Novel\nauthor: Hipster Author\ncontact: example@email.com\ndemographic: seinen\ngenre: fantasy, drama, comedy\ntags: demo novel, translated novel, web novel\n# have Discord group you want readers to join?\n# uncomment below by remove # and set the value to your group ID\n#discord_group_id: 676722421512xxxxxxxxxxx\n  ",
+  "contributors.yml": "# You can remove comment lines starting with #\n# Standard value after the contributor nickname is a string indicates\n# Web Monetization payment pointer to the contributor. If you need to insert more data\n# you can create an object for it that ultimately has \"payment\" children value.\n# \n# If you include email to as children value, ProgNovel will pull Gravatar\n# avatar image and profile based on that email and show them in ProgNovel's\n# Revenue Share section in every novel page.\n#\n# Unlike contributors for entire site, you don't have to set rate for\n# novel contributors because ProgNovel will calculate rate for them based\n# on how many they are being credited in the novel chapters frontmatter.\n\n# Author\nAwesomeAuthor:\n  payment: $ilp.uphold.com/LJmbPn7WD4JB # ILP address - FreeCodeCamp\n  email: example@email.com\n\n# Editor\nMyEditor: $ilp.uphold.com/D7BwPKMQzBiD # ILP address - Internet Archive\n\n# Proofreader\nMyProofreader: $ilp.uphold.com/rKe8mMbUGkBm # ILP address - Web Foundation\nZoom: $ilp.uphold.com/edR8erBDbRyq # ILP address - Creative Commons\nKabooom: $ilp.uphold.com/JWP2Um9RFi9a # ILP address - Artist Rescue Trust\nWowee: $ilp.uphold.com/QkG86UgXzKq8 # ILP address - Defold Foundation\n  "
+};
 
 function init(_x) {
   return _init.apply(this, arguments);
