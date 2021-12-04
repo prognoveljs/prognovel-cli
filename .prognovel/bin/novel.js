@@ -14,6 +14,7 @@ exports.handler = async function (argv) {
   console.log(require.main.path);
   const { _ } = argv;
   const cmd = _[1];
+  const novel = _[2];
   if (!COMMANDS.includes(cmd))
     failBuild(
       `Invalid command for prognovel novel ... are:
@@ -36,8 +37,12 @@ exports.handler = async function (argv) {
 
   switch (cmd) {
     case "add":
+      require("../.dist/main").addNovel(novel);
       break;
     case "remove":
+      console.log(
+        "Under development. If you wish to remove a novel from your project, manually delete its folder and then remove it under `novels` in site-settings.yml",
+      );
       break;
     default:
       break;
