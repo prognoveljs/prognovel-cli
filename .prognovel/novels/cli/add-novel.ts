@@ -35,7 +35,7 @@ https://www.w3schools.io/file/yaml-arrays/`);
     writeFileSync(`novels/${novel}/` + file, novelConfigFiles[file], "utf-8");
   });
 
-  writeFileSync(siteFiles().settings, JSON.stringify(dump(settings)), "utf-8");
+  writeFileSync(siteFiles().settings, dump(settings), "utf-8");
 
   console.log(`
   🎉 you have created a new novel for your site.

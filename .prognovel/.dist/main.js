@@ -15065,7 +15065,7 @@ function addNovel(novel) {
   Object.keys(novelConfigFiles).forEach(function (file) {
     fs.writeFileSync("novels/".concat(novel, "/") + file, novelConfigFiles[file], "utf-8");
   });
-  fs.writeFileSync(siteFiles().settings, JSON.stringify(dump$2(settings)), "utf-8");
+  fs.writeFileSync(siteFiles().settings, dump$2(settings), "utf-8");
   console.log("\n  \uD83C\uDF89 you have created a new novel for your site.\n  Go check it out in folder \"novels/".concat(novel, "\"\n  \n  Proceed in configuring novel settings in \"info.yml\" and credit\n  your editors/proofreaders/contributors in \"contributors.yml\". \n  Change the book cover and banner while you're at it!\n  \n"));
   process.exit();
 }

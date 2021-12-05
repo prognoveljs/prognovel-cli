@@ -6,7 +6,6 @@ disqus_id: prog-novel
 ### PUBLISHED BOOKS ###
 # you can left out a book folder if you're not ready to publish a certain book
 novels:
-  - yashura-legacy
 
 ### WEBMONETIZATION REVSHARE OPTIONS ###
 
