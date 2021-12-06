@@ -10,17 +10,30 @@ function cfWorkerKV() {
         CF_API_BASE_ENDPOINT +
         `accounts/${CF_ACCOUNT_ID}/storage/kv/namespaces/${CF_NAMESPACE_ID}/values/${key}`;
 
-      const form = new FormData();
-
-      const res = await fetch(url, {
-        headers: {
-          Authorization: "Bearer " + CF_API_TOKEN,
-        },
-        body: data,
-        method: "PUT",
-      });
-      const json = await res.json();
-      console.log(`Uploading ${key} is ${json.success ? "sucess" : "failed"}`);
+      try {
+        const res = await fetch(url, {
+          headers: {
+            Authorization: "Bearer " + CF_API_TOKEN,
+          },
+          body: data,
+          method: "PUT",
+        });
+        const json = await res.json();
+        console.log(`Uploading ${key} is ${json.success ? "sucess" : "failed"}`);
+        if (!json.success) {
+          failBuild(
+            `Failed to upload to Cloudflare server. 
+    Make sure you set the environment secrets in .env file correctly`,
+            "upload failed",
+          );
+        }
+      } catch (error) {
+        failBuild(
+          `Failed to upload to Cloudflare server. 
+  Make sure you set the environment secrets in .env file correctly`,
+          "upload failed",
+        );
+      }
     },
   };
 }
