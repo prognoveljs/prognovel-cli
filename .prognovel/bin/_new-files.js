@@ -1,7 +1,7 @@
 const siteFilesContent = {
   ".env": `# WARNING!
-# Treat this file securly as tokens listed below can be used to access
-# your backend! It is recommended not to include this file if you upload
+# Treat this file securely as tokens listed below can be used to access
+# your backend! Do not include this file if you upload
 # or copy this project folder over other computers.
 CF_ACCOUNT_ID=
 CF_NAMESPACE_ID=

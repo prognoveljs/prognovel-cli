@@ -79,12 +79,12 @@ tags: demo novel, translated novel, web novel
 # on how many they are being credited in the novel chapters frontmatter.
 
 # Author
-AwesomeAuthor:
+AuthorName:
   payment: $ilp.uphold.com/LJmbPn7WD4JB # ILP address - FreeCodeCamp
   email: example@email.com
 
 # Editor
-MyEditor: $ilp.uphold.com/D7BwPKMQzBiD # ILP address - Internet Archive
+EditorName: $ilp.uphold.com/D7BwPKMQzBiD # ILP address - Internet Archive
 
 # Proofreader
 MyProofreader: $ilp.uphold.com/rKe8mMbUGkBm # ILP address - Web Foundation
