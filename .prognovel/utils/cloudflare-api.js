@@ -1,10 +1,7 @@
 const fetch = require("node-fetch");
-const { Readable } = require("stream");
 const CF_API_BASE_ENDPOINT = "https://api.cloudflare.com/client/v4/";
-const { CF_ACCOUNT_ID, CF_NAMESPACE_ID, CF_AUTH_KEY } = process.env;
+const { CF_ACCOUNT_ID, CF_NAMESPACE_ID, CF_API_TOKEN } = process.env;
 const { FormData } = require("formdata-node");
-const { FormDataEncoder } = require("form-data-encoder");
-const { fileFromPath } = require("formdata-node/file-from-path");
 
 function cfWorkerKV() {
   return {
@@ -17,7 +14,7 @@ function cfWorkerKV() {
 
       const res = await fetch(url, {
         headers: {
-          Authorization: "Bearer " + CF_AUTH_KEY,
+          Authorization: "Bearer " + CF_API_TOKEN,
         },
         body: data,
         method: "PUT",

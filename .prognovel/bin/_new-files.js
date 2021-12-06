@@ -1,7 +1,23 @@
 const siteFilesContent = {
+  ".env": `# WARNING!
+# Treat this file securly as tokens listed below can be used to access
+# your backend! It is recommended not to include this file if you upload
+# or copy this project folder over other computers.
+CF_ACCOUNT_ID=
+CF_NAMESPACE_ID=
+CF_API_TOKEN=
+
+# Two variables below are necessary to post to discord bot.
+# Get your DISCORD_WEBHOOK_URL by edit a channel where you want
+# your bot is live > Integrations > View Webhooks > New Webhook
+# and then copy the webhook URL of your newly created bot.
+SITE_URL=
+DISCORD_WEBHOOK_URL=`,
+  ".gitignore": `.env`,
   "site-settings.yml": `site_title: ProgNovel App
 contact: example@email.com
-disqus_id: prog-novel
+disqus_id:
+image_resizer_service:
 
 ### PUBLISHED BOOKS ###
 # you can left out a book folder if you're not ready to publish a certain book
