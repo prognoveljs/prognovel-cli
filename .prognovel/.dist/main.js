@@ -15062,6 +15062,7 @@ function addNovel(novel) {
   });
   fs.copyFileSync(require.main.path + "/assets/banner.jpeg", "novels/".concat(novel, "/banner.jpeg"));
   fs.copyFileSync(require.main.path + "/assets/cover.png", "novels/".concat(novel, "/cover.png"));
+  fs.writeFileSync("novels/".concat(novel, "/contents/volume-1/chapter-1.md"), chapterTemplate, "utf-8");
   Object.keys(novelConfigFiles).forEach(function (file) {
     fs.writeFileSync("novels/".concat(novel, "/") + file, novelConfigFiles[file], "utf-8");
   });
@@ -15074,6 +15075,7 @@ var novelConfigFiles = {
   "info.yml": "title: Awesome Fantasy Novel\nauthor: Hipster Author\ncontact: example@email.com\ndemographic: seinen\ngenre: fantasy, drama, comedy\ntags: demo novel, translated novel, web novel\n# have Discord group you want readers to join?\n# uncomment below by remove # and set the value to your group ID\n#discord_group_id: 676722421512xxxxxxxxxxx\n  ",
   "contributors.yml": "# You can remove comment lines starting with #\n# Standard value after the contributor nickname is a string indicates\n# Web Monetization payment pointer to the contributor. If you need to insert more data\n# you can create an object for it that ultimately has \"payment\" children value.\n# \n# If you include email to as children value, ProgNovel will pull Gravatar\n# avatar image and profile based on that email and show them in ProgNovel's\n# Revenue Share section in every novel page.\n#\n# Unlike contributors for entire site, you don't have to set rate for\n# novel contributors because ProgNovel will calculate rate for them based\n# on how many they are being credited in the novel chapters frontmatter.\n\n# Author\nAwesomeAuthor:\n  payment: $ilp.uphold.com/LJmbPn7WD4JB # ILP address - FreeCodeCamp\n  email: example@email.com\n\n# Editor\nMyEditor: $ilp.uphold.com/D7BwPKMQzBiD # ILP address - Internet Archive\n\n# Proofreader\nMyProofreader: $ilp.uphold.com/rKe8mMbUGkBm # ILP address - Web Foundation\nZoom: $ilp.uphold.com/edR8erBDbRyq # ILP address - Creative Commons\nKabooom: $ilp.uphold.com/JWP2Um9RFi9a # ILP address - Artist Rescue Trust\nWowee: $ilp.uphold.com/QkG86UgXzKq8 # ILP address - Defold Foundation\n  "
 };
+var chapterTemplate = "---\ntitle: A Chapter Title\nmonetized: false\nauthor: AuthorName\neditor: EditorName\n---\n\nBla bla bla bla the story goes here bla bla bla...";
 
 function init(_x) {
   return _init.apply(this, arguments);

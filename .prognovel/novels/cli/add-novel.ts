@@ -28,6 +28,7 @@ https://www.w3schools.io/file/yaml-arrays/`);
   }
 
   mkdirSync(`novels/${novel}/contents/volume-1`, { recursive: true });
+  writeFileSync(`novels/${novel}/contents/volume-1/chapter-1.md`, chapterTemplate, "utf-8");
   copyFileSync(require.main.path + "/assets/banner.jpeg", `novels/${novel}/banner.jpeg`);
   copyFileSync(require.main.path + "/assets/cover.png", `novels/${novel}/cover.png`);
 
@@ -92,3 +93,12 @@ Kabooom: $ilp.uphold.com/JWP2Um9RFi9a # ILP address - Artist Rescue Trust
 Wowee: $ilp.uphold.com/QkG86UgXzKq8 # ILP address - Defold Foundation
   `,
 };
+
+const chapterTemplate = `---
+title: A Chapter Title
+monetized: false
+author: AuthorName
+editor: EditorName
+---
+
+Bla bla bla bla the story goes here bla bla bla...`;
