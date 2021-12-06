@@ -1,14 +1,27 @@
 const siteFilesContent = {
-  "site-settings.yml": `site_title: ProgNovel
-contact: prognovel@gmail.com
-backend_api: https://api.prognovel.workers.dev
-use_image_optimization_microservice: true
-disqus_id: prog-novel
+  ".env": `# WARNING!
+# Treat this file securely as tokens listed below can be used to access
+# your backend! Do not include this file if you upload
+# or copy this project folder over other computers.
+CF_ACCOUNT_ID=
+CF_NAMESPACE_ID=
+CF_API_TOKEN=
+
+# Two variables below are necessary to post to discord bot.
+# Get your DISCORD_WEBHOOK_URL by edit a channel where you want
+# your bot is live > Integrations > View Webhooks > New Webhook
+# and then copy the webhook URL of your newly created bot.
+SITE_URL=
+DISCORD_WEBHOOK_URL=`,
+  ".gitignore": `.env`,
+  "site-settings.yml": `site_title: ProgNovel App
+contact: example@email.com
+disqus_id:
+image_resizer_service:
 
 ### PUBLISHED BOOKS ###
 # you can left out a book folder if you're not ready to publish a certain book
 novels:
-  - yashura-legacy
 
 ### WEBMONETIZATION REVSHARE OPTIONS ###
 
@@ -36,8 +49,9 @@ rev_share_contribution_per_chapter:
   editor: 3
   proofreader: 2
   `,
-  "site-contributors.yml": `ProgNovel:
-  email: prognovel@gmail.com
+  "site-contributors.yml": `# 
+ProgNovel:
+  email: example@email.com
   payment: $ilp.uphold.com/edR8erBDbRyq
   rate: 25
 
@@ -57,43 +71,6 @@ m4naG3R:
   payment: $ilp.uphold.com/edR8erBDbRyq
   rate: 22
 `,
-};
-
-const novelFilesContent = {
-  "contributors.yml": `# all payment pointers below will use non-profit organizations' pointer address
-# since I have some problems in signing up for ILP-enabled digital wallets
-#
-# more info for non-profit organizations' payment pointer address:
-# https://community.webmonetization.org/grantfortheweb/non-profit-payment-pointers-2890
-
-# Author
-Radhy:
-  payment: $ilp.uphold.com/LJmbPn7WD4JB # ILP address - FreeCodeCamp
-  email: prognovel@gmail.com
-
-# Editor
-MyEditor: $ilp.uphold.com/D7BwPKMQzBiD # ILP address - Internet Archive
-
-# Proofreader
-MyProofreader: $ilp.uphold.com/rKe8mMbUGkBm # ILP address - Web Foundation
-Zoom: $ilp.uphold.com/edR8erBDbRyq # ILP address - Creative Commons
-Kabooom: $ilp.uphold.com/JWP2Um9RFi9a # ILP address - Artist Rescue Trust
-Wowee: $ilp.uphold.com/QkG86UgXzKq8 # ILP address - Defold Foundation
-  `,
-  "info.yml": `title: Yashura Legacy
-author: Radhy
-contact: prognovel@gmail.com
-demographic: seinen
-genre: fantasy, drama, comedy
-tags: demo novel, translated novel, indonesian novel
-
-# have Discord group you want readers to join?
-# uncomment below by remove # and set the value to your group ID
-# discord_group_id: 676722349441024000
-  `,
-  "synopsis.md": `This will be shown as novel synopsis. Synopsis accepts Markdown format.
-  
-Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veritatis, libero et maiores voluptate facilis quis ut? Deleniti incidunt a minima veniam quibusdam, est eum modi inventore, corrupti non assumenda ipsa?`,
 };
 
 const githubActionContent = {
@@ -140,7 +117,6 @@ const components = {
 };
 module.exports = {
   siteFilesContent,
-  novelFilesContent,
   githubActionContent,
   components,
 };

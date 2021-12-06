@@ -7,12 +7,11 @@ import { fixTypo } from "./fix-typo";
 import { failBuild } from "./utils/build";
 import { pickImage } from "./utils/image";
 import { novelFiles, publishFiles, siteFiles } from "./_files";
+import { addNovel } from "./novels/cli/add-novel";
 
 async function init(opts?: any) {
   console.log("Initialize on folder:", process.cwd());
 }
-
-async function addNovel(opts?: any) {}
 
 async function build(opts?: any) {
   console.log("");

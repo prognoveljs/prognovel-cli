@@ -51,3 +51,7 @@ export function ensurePublishDirectoryExist(novel?: string) {
     fs.mkdirSync(publishFiles().novelFolder(novel));
   }
 }
+
+export function checkIDString(novel: string): boolean {
+  return /([A-Za-z0-9\-\_]*$)/.test(novel);
+}

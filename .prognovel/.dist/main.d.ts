@@ -4,7 +4,7 @@ import { fixTypo } from "./fix-typo";
 import { failBuild } from "./utils/build";
 import { pickImage } from "./utils/image";
 import { novelFiles, publishFiles, siteFiles } from "./_files";
+import { addNovel } from "./novels/cli/add-novel";
 declare function init(opts?: any): Promise<void>;
-declare function addNovel(opts?: any): Promise<void>;
 declare function build(opts?: any): Promise<void>;
 export { init, pickImage, build, addNovel, host, check, fixTypo, failBuild, siteFiles, novelFiles, publishFiles, };

@@ -56,12 +56,21 @@ exports.handler = async function ({ _ }) {
 
   copyFileSync(require.main.path + "/assets/favicon.png", basePath + "favicon.png");
   copyFileSync(require.main.path + "/assets/logo.png", basePath + "logo.png");
+  console.log(`
+  🎉 you have created a new ProgNovel site.
+  
+  Proceed in configuring settings in "site-settings.yml" and credit
+  your staffs in "site-contributors.yml". Change the logo image while you're at it!
+  
+  Once you are done, you can create a new novel folder by running
+  "prognovel novel add some-novel-id".
+  
+`);
   process.exit();
 };
 
 async function questions() {
   const { stdin, stdout } = require("process");
-  console.log(require("readline-promise"));
   const rl = require("readline-promise").default.createInterface({
     input: stdin,
     output: stdout,

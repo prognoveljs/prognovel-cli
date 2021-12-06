@@ -22,8 +22,7 @@ exports.builder = {
   },
 };
 
-const webhook =
-  "https://discord.com/api/webhooks/905388052799717376/wiSMZXx-O0g-1sY90WNrmS7am88KnZ2FTSdTnn_vRXUgv7beJ1HVV9PymQOPcfwQ517s";
+const { DISCORD_WEBHOOK_URL } = process.env;
 
 exports.handler = async function (argv) {
   const post = [];
@@ -105,7 +104,7 @@ exports.handler = async function (argv) {
 
       for (const novel of updatedNovels) {
         console.log("👋 posting announcement for " + novel + " updates.");
-        postToDiscord(webhook, novel);
+        postToDiscord(DISCORD_WEBHOOK_URL, novel);
       }
     }
   } catch (error) {}
