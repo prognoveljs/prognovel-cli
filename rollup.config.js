@@ -4,7 +4,7 @@ import typescript from "rollup-plugin-typescript2";
 import json from "rollup-plugin-json";
 import babel from "rollup-plugin-babel";
 import { wasm } from "@rollup/plugin-wasm";
-
+import sourcemap from "rollup-plugin-sourcemaps";
 // import regenerator from "rollup-plugin-regenerator";
 // import builtins from "rollup-plugin-node-builtins";
 // import sourcemap from "rollup-plugin-sourcemaps";

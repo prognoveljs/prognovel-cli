@@ -8,7 +8,7 @@ const {
   siteFilesContent,
   components,
 } = require("./_new-files");
-const { join } = require("path");
+const { join, resolve } = require("path");
 
 exports.builder = {
   publish: {
@@ -54,8 +54,8 @@ exports.handler = async function ({ _ }) {
     writeFileSync(basePath + file, siteFilesContent[file], "utf-8");
   });
 
-  copyFileSync(require.main.path + "/assets/favicon.png", basePath + "favicon.png");
-  copyFileSync(require.main.path + "/assets/logo.png", basePath + "logo.png");
+  copyFileSync(process.env.MAIN_PATH + "/assets/favicon.png", basePath + "favicon.png");
+  copyFileSync(process.env.MAIN_PATH + "/assets/logo.png", basePath + "logo.png");
   console.log(`
   🎉 you have created a new ProgNovel site.
   
