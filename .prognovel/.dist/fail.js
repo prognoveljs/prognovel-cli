@@ -1419,7 +1419,7 @@ function supportsColor(haveStream, streamIsTTY) {
 	if (process.platform === 'win32') {
 		// Windows 10 build 10586 is the first Windows release that supports 256 colors.
 		// Windows 10 build 14931 is the first release that supports 16m/TrueColor.
-		const osRelease = os__default['default'].release().split('.');
+		const osRelease = os__default["default"].release().split('.');
 		if (
 			Number(osRelease[0]) >= 10 &&
 			Number(osRelease[2]) >= 10586
@@ -1480,8 +1480,8 @@ function getSupportLevel(stream) {
 
 var supportsColor_1 = {
 	supportsColor: getSupportLevel,
-	stdout: translateLevel(supportsColor(true, tty__default['default'].isatty(1))),
-	stderr: translateLevel(supportsColor(true, tty__default['default'].isatty(2)))
+	stdout: translateLevel(supportsColor(true, tty__default["default"].isatty(1))),
+	stderr: translateLevel(supportsColor(true, tty__default["default"].isatty(2)))
 };
 
 const stringReplaceAll$1 = (string, substring, replacer) => {

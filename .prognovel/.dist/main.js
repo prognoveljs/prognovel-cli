@@ -168,9 +168,9 @@ var runtime = (function (exports) {
   // This is a polyfill for %IteratorPrototype% for environments that
   // don't natively support it.
   var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
+  define(IteratorPrototype, iteratorSymbol, function () {
     return this;
-  };
+  });
 
   var getProto = Object.getPrototypeOf;
   var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
@@ -184,8 +184,9 @@ var runtime = (function (exports) {
 
   var Gp = GeneratorFunctionPrototype.prototype =
     Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunction.prototype = GeneratorFunctionPrototype;
+  define(Gp, "constructor", GeneratorFunctionPrototype);
+  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
   GeneratorFunction.displayName = define(
     GeneratorFunctionPrototype,
     toStringTagSymbol,
@@ -299,9 +300,9 @@ var runtime = (function (exports) {
   }
 
   defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+  define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
     return this;
-  };
+  });
   exports.AsyncIterator = AsyncIterator;
 
   // Note that simple async functions are implemented on top of
@@ -494,13 +495,13 @@ var runtime = (function (exports) {
   // iterator prototype chain incorrectly implement this, causing the Generator
   // object to not be returned from this call. This ensures that doesn't happen.
   // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
+  define(Gp, iteratorSymbol, function() {
     return this;
-  };
+  });
 
-  Gp.toString = function() {
+  define(Gp, "toString", function() {
     return "[object Generator]";
-  };
+  });
 
   function pushTryEntry(locs) {
     var entry = { tryLoc: locs[0] };
@@ -819,14 +820,19 @@ try {
 } catch (accidentalStrictMode) {
   // This module should not be running in strict mode, so the above
   // assignment should always work unless something is misconfigured. Just
-  // in case runtime.js accidentally runs in strict mode, we can escape
+  // in case runtime.js accidentally runs in strict mode, in modern engines
+  // we can explicitly access globalThis. In older engines we can escape
   // strict mode using a global Function call. This could conceivably fail
   // if a Content Security Policy forbids using Function, but in that case
   // the proper solution is to fix the accidental strict mode problem. If
   // you've misconfigured your bundler to force strict mode and applied a
   // CSP to forbid Function, and you're not willing to fix either of those
   // problems, please detail your unique predicament in a GitHub issue.
-  Function("r", "regeneratorRuntime = r")(runtime);
+  if (typeof globalThis === "object") {
+    globalThis.regeneratorRuntime = runtime;
+  } else {
+    Function("r", "regeneratorRuntime = r")(runtime);
+  }
 }
 });
 
@@ -2235,7 +2241,7 @@ function supportsColor(haveStream, streamIsTTY) {
 	if (process.platform === 'win32') {
 		// Windows 10 build 10586 is the first Windows release that supports 256 colors.
 		// Windows 10 build 14931 is the first release that supports 16m/TrueColor.
-		const osRelease = os__default['default'].release().split('.');
+		const osRelease = os__default["default"].release().split('.');
 		if (
 			Number(osRelease[0]) >= 10 &&
 			Number(osRelease[2]) >= 10586
@@ -2296,8 +2302,8 @@ function getSupportLevel(stream) {
 
 var supportsColor_1 = {
 	supportsColor: getSupportLevel,
-	stdout: translateLevel(supportsColor(true, tty__default['default'].isatty(1))),
-	stderr: translateLevel(supportsColor(true, tty__default['default'].isatty(2)))
+	stdout: translateLevel(supportsColor(true, tty__default["default"].isatty(1))),
+	stderr: translateLevel(supportsColor(true, tty__default["default"].isatty(2)))
 };
 
 const stringReplaceAll$1 = (string, substring, replacer) => {
@@ -2856,7 +2862,7 @@ var BOOK_COVER = {
   formats: ["webp", "jpeg"],
   quality: 80
 };
-path__default['default'].join(process.cwd(), "/novels");
+path__default["default"].join(process.cwd(), "/novels");
 
 function isNothing$1(subject) {
   return (typeof subject === 'undefined') || (subject === null);
@@ -6712,19 +6718,19 @@ function checkValidBookFolder(novel) {
   var novelMetadata;
 
   try {
-    settings = jsYaml$2.load(fs__default['default'].readFileSync(siteFiles().settings));
+    settings = jsYaml$2.load(fs__default["default"].readFileSync(siteFiles().settings));
   } catch (_) {
     errorSiteSettingsNotFound();
   }
 
   try {
-    novelMetadata = jsYaml$2.load(fs__default['default'].readFileSync(novelFiles(novel).info));
+    novelMetadata = jsYaml$2.load(fs__default["default"].readFileSync(novelFiles(novel).info));
   } catch (_) {
     errorNovelInfoNotFound(novel);
   }
 
-  var isInfoExist = fs__default['default'].existsSync(novelFiles(novel).info);
-  var isSynopsisExist = fs__default['default'].existsSync(novelFiles(novel).synopsis);
+  var isInfoExist = fs__default["default"].existsSync(novelFiles(novel).info);
+  var isSynopsisExist = fs__default["default"].existsSync(novelFiles(novel).synopsis);
   var isExistInSettings = settings.novels.includes(novel);
   var isTitleExist = novelMetadata.title;
   var isDemographicExist = novelMetadata.demographic;
@@ -6741,14 +6747,14 @@ function checkValidBookFolder(novel) {
   return isInfoExist && isSynopsisExist && isExistInSettings;
 }
 function ensurePublishDirectoryExist(novel) {
-  if (!fs__default['default'].existsSync(publishFiles().folder)) {
-    fs__default['default'].mkdirSync(publishFiles().folder);
+  if (!fs__default["default"].existsSync(publishFiles().folder)) {
+    fs__default["default"].mkdirSync(publishFiles().folder);
   }
 
   if (!novel) return;
 
-  if (!fs__default['default'].existsSync(publishFiles().novelFolder(novel))) {
-    fs__default['default'].mkdirSync(publishFiles().novelFolder(novel));
+  if (!fs__default["default"].existsSync(publishFiles().novelFolder(novel))) {
+    fs__default["default"].mkdirSync(publishFiles().novelFolder(novel));
   }
 }
 function checkIDString(novel) {
@@ -6774,7 +6780,7 @@ function _generateBookCover() {
           case 0:
             folder = publishFiles();
             ensurePublishDirectoryExist(novel);
-            if (!fs__default['default'].existsSync(folder.novelCoverFolder(novel))) fs__default['default'].mkdirSync(folder.novelCoverFolder(novel)); // checking input image
+            if (!fs__default["default"].existsSync(folder.novelCoverFolder(novel))) fs__default["default"].mkdirSync(folder.novelCoverFolder(novel)); // checking input image
 
             inputImage = novelFiles(novel).cover; // metadata
 
@@ -6810,7 +6816,7 @@ function _generateBookCover() {
                         images[size][format] = name(i);
                       }
 
-                      sharp__default['default'](inputImage).resize(sizes[size][0] * i, sizes[size][1] * i).webp({
+                      sharp__default["default"](inputImage).resize(sizes[size][0] * i, sizes[size][1] * i).webp({
                         quality: quality,
                         reductionEffort: 6
                       }).toFile(path.join(folder.novelCoverFolder(novel), name(i)));
@@ -6823,7 +6829,7 @@ function _generateBookCover() {
                         images[size][format] = name(_i);
                       }
 
-                      sharp__default['default'](inputImage).resize(sizes[size][0] * _i, sizes[size][1] * _i).jpeg({
+                      sharp__default["default"](inputImage).resize(sizes[size][0] * _i, sizes[size][1] * _i).jpeg({
                         quality: quality
                       }).toFile(path.join(folder.novelCoverFolder(novel), name(_i)));
                     }
@@ -6839,7 +6845,7 @@ function _generateBookCover() {
               return size * 2;
             });
             _context.next = 10;
-            return sharp__default['default'](inputImage).resize(placeholderSizes[0], placeholderSizes[1]).jpeg({
+            return sharp__default["default"](inputImage).resize(placeholderSizes[0], placeholderSizes[1]).jpeg({
               quality: 25
             }).toBuffer();
 
@@ -6880,7 +6886,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 var _defineProperty = unwrapExports(defineProperty);
 
-var e,n,t,r,o,i$1,a,u,s,f,c$1,d,p,m,y,h,w,A,b,E,g,_,T,S,R,I,v,L,M,U,H,P,W,x,O,D,F,N,B,C,K,j,q="object"==typeof process&&"object"==typeof process.versions&&"string"==typeof process.versions.node&&"function"==typeof require;let k;if(q)try{k=require("path");}catch(e){}function X(e){throw new Error("wasm abort"+(e?": "+(e.stack||e):""))}"undefined"!=typeof module&&(u=module,module=void 0),(s={preRun:[],postRun:[],print:console.log.bind(console),printErr:console.error.bind(console)}).ready=new Promise(u=>{s.onRuntimeInitialized=(()=>{s.___wasm_call_ctors=e=s.asm.c,s._wrealloc=n=s.asm.d,s._wfree=t=s.asm.e,s._WErrGetCode=r=s.asm.f,s._WErrGetMsg=o=s.asm.g,s._WErrClear=i$1=s.asm.h,s._parseUTF8=a=s.asm.i,u({});});}),q&&k&&(s.locateFile=function(e){return k.join(__dirname,e)});const G=s.print;let V=s.printErr;for(c$1 in f={},s=void 0!==s?s:{})s.hasOwnProperty(c$1)&&(f[c$1]=s[c$1]);for(c$1 in d=!1,p=!1,d="object"==typeof window,p="function"==typeof importScripts,m="object"==typeof process&&"object"==typeof process.versions&&"string"==typeof process.versions.node&&!d&&!p,y=!d&&!m&&!p,h="",m?(h=__dirname+"/",w=function(e,n){return b||(b=require("fs")),E||(E=require("path")),e=E.normalize(e),b.readFileSync(e,n?null:"utf8")},A=function(e){var n=w(e,!0);return n.buffer||(n=new Uint8Array(n)),n.buffer,n},process.argv.length>1&&process.argv[1].replace(/\\/g,"/"),process.argv.slice(2),"undefined"!=typeof module&&(module.exports=s),s.inspect=function(){return "[Emscripten Module object]"}):y?("undefined"!=typeof read&&(w=function(e){return read(e)}),A=function(e){return "function"==typeof readbuffer?new Uint8Array(readbuffer(e)):read(e,"binary")},"undefined"!=typeof scriptArgs?scriptArgs:"undefined"!=typeof arguments&&(arguments),void 0!==G&&("undefined"==typeof console&&(console={}),console.log=G,console.warn=console.error="undefined"!=typeof printErr?printErr:G)):(d||p)&&(p?h=self.location.href:document.currentScript&&(h=document.currentScript.src),h=0!==h.indexOf("blob:")?h.substr(0,h.lastIndexOf("/")+1):"",w=function(e){var n=new XMLHttpRequest;return n.open("GET",e,!1),n.send(null),n.responseText},p&&(A=function(e){var n=new XMLHttpRequest;return n.open("GET",e,!1),n.responseType="arraybuffer",n.send(null),new Uint8Array(n.response)})),f)f.hasOwnProperty(c$1)&&(s[c$1]=f[c$1]);function z(e,n){return e%n>0&&(e+=n-e%n),e}function Y(e){R=e,s.HEAP8=I=new Int8Array(e),s.HEAP16=new Int16Array(e),s.HEAP32=L=new Int32Array(e),s.HEAPU8=v=new Uint8Array(e),s.HEAPU16=new Uint16Array(e),s.HEAPU32=new Uint32Array(e),s.HEAPF32=new Float32Array(e),s.HEAPF64=new Float64Array(e);}function $(e){for(var n,t;e.length>0;)"function"!=typeof(n=e.shift())?"number"==typeof(t=n.func)?void 0===n.arg?s.dynCall_v(t):s.dynCall_vi(t,n.arg):t(void 0===n.arg?null:n.arg):n();}function J(e){return String.prototype.startsWith?e.startsWith(F):0===e.indexOf(F)}function Q(){try{if(g)return new Uint8Array(g);if(A)return A(N);throw "both async and sync fetching of the wasm failed"}catch(e){X(e);}}function Z(e){function n(){K||(K=!0,S||($(H),$(P),s.onRuntimeInitialized&&s.onRuntimeInitialized(),function(){if(s.postRun)for("function"==typeof s.postRun&&(s.postRun=[s.postRun]);s.postRun.length;)e=s.postRun.shift(),W.unshift(e);var e;$(W);}()));}x>0||(function(){if(s.preRun)for("function"==typeof s.preRun&&(s.preRun=[s.preRun]);s.preRun.length;)e=s.preRun.shift(),U.unshift(e);var e;$(U);}(),x>0||(s.setStatus?(s.setStatus("Running..."),setTimeout(function(){setTimeout(function(){s.setStatus("");},1),n();},1)):n()));}if(f=null,s.arguments&&(s.arguments),s.thisProgram&&s.thisProgram,s.quit&&s.quit,s.wasmBinary&&(g=s.wasmBinary),s.noExitRuntime&&s.noExitRuntime,"object"!=typeof WebAssembly&&V("no native wasm support detected"),T=new WebAssembly.Table({initial:8,maximum:8,element:"anyfunc"}),S=!1,"undefined"!=typeof TextDecoder&&new TextDecoder("utf8"),"undefined"!=typeof TextDecoder&&new TextDecoder("utf-16le"),M=s.TOTAL_MEMORY||16777216,(_=s.wasmMemory?s.wasmMemory:new WebAssembly.Memory({initial:M/65536}))&&(R=_.buffer),M=R.byteLength,Y(R),L[2044]=5251216,U=[],H=[],P=[],W=[],x=0,O=null,D=null,s.preloadedImages={},s.preloadedAudios={},F="data:application/octet-stream;base64,",J(N="markdown.wasm")||(j=N,N=s.locateFile?s.locateFile(j,h):h+j),H.push({func:function(){e();}}),B={a:function(e,n,t){v.set(v.subarray(n,n+t),e);},b:function(e){var n,t=I.length;if(e>2147418112)return !1;for(n=Math.max(t,16777216);n<e;)n=n<=536870912?z(2*n,65536):Math.min(z((3*n+2147483648)/4,65536),2147418112);return !!function(e){try{return _.grow(e-R.byteLength+65535>>16),Y(_.buffer),1}catch(e){}}(n)},memory:_,table:T},C=function(){var e={env:B,wasi_unstable:B};function n(e,n){var t=e.exports;s.asm=t,function(e){if(x--,s.monitorRunDependencies&&s.monitorRunDependencies(x),0==x&&(null!==O&&(clearInterval(O),O=null),D)){var n=D;D=null,n();}}();}function t(e){n(e.instance);}function r(n){return (g||!d&&!p||"function"!=typeof fetch?new Promise(function(e,n){e(Q());}):fetch(N,{credentials:"same-origin"}).then(function(e){if(!e.ok)throw "failed to load wasm binary file at '"+N+"'";return e.arrayBuffer()}).catch(function(){return Q()})).then(function(n){return WebAssembly.instantiate(n,e)}).then(n,function(e){V("failed to asynchronously prepare wasm: "+e),X(e);})}if(x++,s.monitorRunDependencies&&s.monitorRunDependencies(x),s.instantiateWasm)try{return s.instantiateWasm(e,n)}catch(e){return V("Module.instantiateWasm callback failed with error: "+e),!1}return function(){if(g||"function"!=typeof WebAssembly.instantiateStreaming||J(N)||"function"!=typeof fetch)return r(t);fetch(N,{credentials:"same-origin"}).then(function(n){return WebAssembly.instantiateStreaming(n,e).then(t,function(e){V("wasm streaming compile failed: "+e),V("falling back to ArrayBuffer instantiation"),r(t);})});}(),{}}(),s.asm=C,e=s.___wasm_call_ctors=function(){return s.asm.c.apply(null,arguments)},s.asm=C,D=function e(){K||Z(),K||(D=e);},s.run=Z,s.preInit)for("function"==typeof s.preInit&&(s.preInit=[s.preInit]);s.preInit.length>0;)s.preInit.pop()();Z(),s.inspect=(()=>"[asm]"),void 0!==u&&(module=u,u=void 0);class WError extends Error{constructor(e,n,t,r){super(n,t||"wasm",r||0),this.name="WError",this.code=e;}}let ee=0;s.postRun.push(()=>{ee=n(0,4);});const ne="undefined"!=typeof TextEncoder?(()=>{const e=new TextEncoder("utf-8"),n=new TextDecoder("utf-8");return {encode:n=>e.encode(n),decode:e=>n.decode(e)}})():"undefined"!=typeof Buffer?{encode:e=>new Uint8Array(Buffer.from(e,"utf-8")),decode:e=>Buffer.from(e.buffer,e.byteOffset,e.byteLength).toString("utf8")}:{encode:e=>{let n=[];for(let t=0,r=e.length;t!=r;++t)n[t]=255&e.charCodeAt(t);return new Uint8Array(n)},decode:e=>String(e)};s.ready;const re={COLLAPSE_WHITESPACE:1,PERMISSIVE_ATX_HEADERS:2,PERMISSIVE_URL_AUTO_LINKS:4,PERMISSIVE_EMAIL_AUTO_LINKS:8,NO_INDENTED_CODE_BLOCKS:16,NO_HTML_BLOCKS:32,NO_HTML_SPANS:64,TABLES:256,STRIKETHROUGH:512,PERMISSIVE_WWW_AUTOLINKS:1024,TASK_LISTS:2048,LATEX_MATH_SPANS:4096,WIKI_LINKS:8192,UNDERLINE:16384,DEFAULT:2823,NO_HTML:96},oe={HTML:1,XHTML:2};function ie(e,u){let s=void 0===(u=u||{}).parseFlags?re.DEFAULT:u.parseFlags,f=0;switch(u.format){case"xhtml":f|=oe.HTML|oe.XHTML;break;case"html":case void 0:case null:case"":f|=oe.HTML;break;default:throw new Error(`invalid format "${u.format}"`)}let c="string"==typeof e?ne.encode(e):e,l=function(e){let n=e(ee),t=L[ee>>2];if(0==t)return null;let r=v.subarray(t,t+n);return r.heapAddr=t,r}(e=>(function(e,r){const o=function(e){return e instanceof Uint8Array?e:new Uint8Array(e)}(e),i=o.length,a=function(e,t){const r=n(0,i);return v.set(e,r),r}(o),u=r(a,i);return function(e){t(e);}(a),u})(c,(n,t)=>a(n,t,s,f,e)));return function(){let e=function(){let e=r();if(0!=e){let n=o(),t=0!=n?UTF8ArrayToString(v,n):"";return i$1(),new WError(e,t)}}();if(e)throw e}(),u.bytes||u.asMemoryView?l:ne.decode(l)}
+var e,n,t,r,i$1,u,a,s,f,c$1,l,p,d,m,y,h,w,g,A,E,b,_,R,S,I,T,v,L,U,W,M,H,P,F,O,k,B,N,x,C="object"==typeof process&&"object"==typeof process.versions&&"string"==typeof process.versions.node&&"function"==typeof require;let q;if(C)try{q=require("path");}catch(e){}function D(e){throw new Error("wasm abort"+(e?": "+(e.stack||e):""))}"undefined"!=typeof module&&(e=module,module=void 0),(n={preRun:[],postRun:[],print:console.log.bind(console),printErr:console.error.bind(console)}).ready=new Promise(e=>{n.onRuntimeInitialized=(()=>{e({});});}),C&&q&&(n.locateFile=function(e){return q.join(__dirname,e)}),n.print;let j=n.printErr;for(r in t={},n=void 0!==n?n:{})n.hasOwnProperty(r)&&(t[r]=n[r]);for(r in i$1="object"==typeof window,u="function"==typeof importScripts,a="","object"==typeof process&&"object"==typeof process.versions&&"string"==typeof process.versions.node?(a=u?require("path").dirname(a)+"/":__dirname+"/",s=function(e,n){return l||(l=require("fs")),p||(p=require("path")),e=p.normalize(e),l.readFileSync(e,n?null:"utf8")},c$1=function(e){var n=s(e,!0);return n.buffer||(n=new Uint8Array(n)),n.buffer,n},f=function(e,n,t){l||(l=require("fs")),p||(p=require("path")),e=p.normalize(e),l.readFile(e,function(e,r){e?t(e):n(r.buffer);});},process.argv.length>1&&process.argv[1].replace(/\\/g,"/"),process.argv.slice(2),"undefined"!=typeof module&&(module.exports=n),n.inspect=function(){return "[Emscripten Module object]"}):(i$1||u)&&(u?a=self.location.href:"undefined"!=typeof document&&document.currentScript&&(a=document.currentScript.src),a=0!==a.indexOf("blob:")?a.substr(0,a.lastIndexOf("/")+1):"",s=function(e){var n=new XMLHttpRequest;return n.open("GET",e,!1),n.send(null),n.responseText},u&&(c$1=function(e){var n=new XMLHttpRequest;return n.open("GET",e,!1),n.responseType="arraybuffer",n.send(null),new Uint8Array(n.response)}),f=function(e,n,t){var r=new XMLHttpRequest;r.open("GET",e,!0),r.responseType="arraybuffer",r.onload=function(){200==r.status||0==r.status&&r.response?n(r.response):t();},r.onerror=t,r.send(null);}),t)t.hasOwnProperty(r)&&(n[r]=t[r]);function G(e){m.delete(_.get(e)),d.push(e);}function K(e,n){return function(e,n){var t,r,o,i;if(!m)for(m=new WeakMap,t=0;t<_.length;t++)(r=_.get(t))&&m.set(r,t);if(m.has(e))return m.get(e);o=function(){if(d.length)return d.pop();try{_.grow(1);}catch(e){if(!(e instanceof RangeError))throw e;throw "Unable to grow wasm table. Set ALLOW_TABLE_GROWTH."}return _.length-1}();try{_.set(o,e);}catch(t){if(!(t instanceof TypeError))throw t;i=function(e,n){var t,r,o,i,u,a,s,f,c;if("function"==typeof WebAssembly.Function){for(t={i:"i32",j:"i64",f:"f32",d:"f64"},r={parameters:[],results:"v"==n[0]?[]:[t[n[0]]]},o=1;o<n.length;++o)r.parameters.push(t[n[o]]);return new WebAssembly.Function(r,e)}for(i=[1,0,1,96],u=n.slice(0,1),a=n.slice(1),s={i:127,j:126,f:125,d:124},i.push(a.length),o=0;o<a.length;++o)i.push(s[a[o]]);return "v"==u?i.push(0):i=i.concat([1,s[u]]),i[1]=i.length-2,f=new Uint8Array([0,97,115,109,1,0,0,0].concat(i,[2,7,1,1,101,1,102,0,0,7,5,1,1,102,0,0])),c=new WebAssembly.Module(f),new WebAssembly.Instance(c,{e:{f:e}}).exports.f}(e,n),_.set(o,i);}return m.set(e,o),o}(e,n)}function X(e){g=e,n.HEAP8=new Int8Array(e),n.HEAP16=new Int16Array(e),n.HEAP32=E=new Int32Array(e),n.HEAPU8=A=new Uint8Array(e),n.HEAPU16=new Uint16Array(e),n.HEAPU32=b=new Uint32Array(e),n.HEAPF32=new Float32Array(e),n.HEAPF64=new Float64Array(e);}function z(e){return e.startsWith(U)}function V(e){return e.startsWith("file://")}function J(e){try{if(e==W&&y)return new Uint8Array(y);if(c$1)return c$1(e);throw "both async and sync fetching of the wasm failed"}catch(e){D(e);}}function $(e){for(var t,r;e.length>0;)"function"!=typeof(t=e.shift())?"number"==typeof(r=t.func)?void 0===t.arg?_.get(r)():_.get(r)(t.arg):r(void 0===t.arg?null:t.arg):t(n);}function Y(e){try{return h.grow(e-g.byteLength+65535>>>16),X(h.buffer),1}catch(e){}}function Q(e){function t(){N||(N=!0,n.calledRun=!0,w||($(S),n.onRuntimeInitialized&&n.onRuntimeInitialized(),function(){if(n.postRun)for("function"==typeof n.postRun&&(n.postRun=[n.postRun]);n.postRun.length;)e=n.postRun.shift(),I.unshift(e);var e;$(I);}()));}T>0||(function(){if(n.preRun)for("function"==typeof n.preRun&&(n.preRun=[n.preRun]);n.preRun.length;)e=n.preRun.shift(),R.unshift(e);var e;$(R);}(),T>0||(n.setStatus?(n.setStatus("Running..."),setTimeout(function(){setTimeout(function(){n.setStatus("");},1),t();},1)):t()));}if(t=null,n.arguments&&(n.arguments),n.thisProgram&&n.thisProgram,n.quit&&n.quit,d=[],n.wasmBinary&&(y=n.wasmBinary),n.noExitRuntime||!0,"object"!=typeof WebAssembly&&D("no native wasm support detected"),w=!1,n.INITIAL_MEMORY,R=[],S=[],I=[],T=0,v=null,L=null,n.preloadedImages={},n.preloadedAudios={},U="data:application/octet-stream;base64,",z(W="markdown.wasm")||(x=W,W=n.locateFile?n.locateFile(x,a):a+x),M={a:function(e){var n,t,r,o,i=A.length;if((e>>>=0)>2147483648)return !1;for(n=1;n<=4;n*=2)if(t=i*(1+.2/n),t=Math.min(t,e+100663296),Y(Math.min(2147483648,((r=Math.max(e,t))%(o=65536)>0&&(r+=o-r%o),r))))return !0;return !1}},function(){var e={a:M};function t(e,t){var r,o=e.exports;n.asm=o,X((h=n.asm.b).buffer),_=n.asm.i,r=n.asm.c,S.unshift(r),function(e){if(T--,n.monitorRunDependencies&&n.monitorRunDependencies(T),0==T&&(null!==v&&(clearInterval(v),v=null),L)){var t=L;L=null,t();}}();}function r(e){t(e.instance);}function o(n){return function(){if(!y&&(i$1||u)){if("function"==typeof fetch&&!V(W))return fetch(W,{credentials:"same-origin"}).then(function(e){if(!e.ok)throw "failed to load wasm binary file at '"+W+"'";return e.arrayBuffer()}).catch(function(){return J(W)});if(f)return new Promise(function(e,n){f(W,function(n){e(new Uint8Array(n));},n);})}return Promise.resolve().then(function(){return J(W)})}().then(function(n){return WebAssembly.instantiate(n,e)}).then(n,function(e){j("failed to asynchronously prepare wasm: "+e),D(e);})}if(T++,n.monitorRunDependencies&&n.monitorRunDependencies(T),n.instantiateWasm)try{return n.instantiateWasm(e,t)}catch(e){return j("Module.instantiateWasm callback failed with error: "+e),!1}y||"function"!=typeof WebAssembly.instantiateStreaming||z(W)||V(W)||"function"!=typeof fetch?o(r):fetch(W,{credentials:"same-origin"}).then(function(n){return WebAssembly.instantiateStreaming(n,e).then(r,function(e){return j("wasm streaming compile failed: "+e),j("falling back to ArrayBuffer instantiation"),o(r)})});}(),n.___wasm_call_ctors=function(){return (n.___wasm_call_ctors=n.asm.c).apply(null,arguments)},H=n._wrealloc=function(){return (H=n._wrealloc=n.asm.d).apply(null,arguments)},P=n._wfree=function(){return (P=n._wfree=n.asm.e).apply(null,arguments)},F=n._WErrGetCode=function(){return (F=n._WErrGetCode=n.asm.f).apply(null,arguments)},O=n._WErrGetMsg=function(){return (O=n._WErrGetMsg=n.asm.g).apply(null,arguments)},k=n._WErrClear=function(){return (k=n._WErrClear=n.asm.h).apply(null,arguments)},B=n._parseUTF8=function(){return (B=n._parseUTF8=n.asm.j).apply(null,arguments)},n.addFunction=K,n.removeFunction=G,L=function e(){N||Q(),N||(L=e);},n.run=Q,n.preInit)for("function"==typeof n.preInit&&(n.preInit=[n.preInit]);n.preInit.length>0;)n.preInit.pop()();Q(),n.inspect=(()=>"[asm]"),void 0!==e&&(module=e,e=void 0);class WError extends Error{constructor(e,n,t,r){super(n,t||"wasm",r||0),this.name="WError",this.code=e;}}function Z(e,n){const t=H(0,n);return A.set(e,t),t}let ee=0;n.postRun.push(()=>{ee=H(0,4);});const ne="undefined"!=typeof TextEncoder?(()=>{const e=new TextEncoder("utf-8"),n=new TextDecoder("utf-8");return {encode:n=>e.encode(n),decode:e=>n.decode(e)}})():"undefined"!=typeof Buffer?{encode:e=>new Uint8Array(Buffer.from(e,"utf-8")),decode:e=>Buffer.from(e.buffer,e.byteOffset,e.byteLength).toString("utf8")}:{encode:e=>{let n=[];for(let t=0,r=e.length;t!=r;++t)n[t]=255&e.charCodeAt(t);return new Uint8Array(n)},decode:e=>String(e)};n.ready;const re={COLLAPSE_WHITESPACE:1,PERMISSIVE_ATX_HEADERS:2,PERMISSIVE_URL_AUTO_LINKS:4,PERMISSIVE_EMAIL_AUTO_LINKS:8,NO_INDENTED_CODE_BLOCKS:16,NO_HTML_BLOCKS:32,NO_HTML_SPANS:64,TABLES:256,STRIKETHROUGH:512,PERMISSIVE_WWW_AUTOLINKS:1024,TASK_LISTS:2048,LATEX_MATH_SPANS:4096,WIKI_LINKS:8192,UNDERLINE:16384,DEFAULT:2823,NO_HTML:96},oe={HTML:1,XHTML:2,AllowJSURI:4};function ie(e,n){let t=void 0===(n=n||{}).parseFlags?re.DEFAULT:n.parseFlags,r=n.allowJSURIs?oe.AllowJSURI:0;switch(n.format){case"xhtml":r|=oe.HTML|oe.XHTML;break;case"html":case void 0:case null:case"":r|=oe.HTML;break;default:throw new Error(`invalid format "${n.format}"`)}let o=n.onCodeBlock?(i=n.onCodeBlock,K(function(e,n,t,r,o){try{const u=n>0?ne.decode(A.subarray(e,e+n)):"",a=A.subarray(t,t+r);let s=void 0;a.toString=(()=>s||(s=ne.decode(a)));let f=null;if(null===(f=i(u,a))||void 0===f)return -1;let c=ue(f);if(c.length>0){const e=Z(c,c.length);b[o>>2]=e;}return c.length}catch(e){return console.error(`error in markdown onCodeBlock callback: ${e.stack||e}`),-1}},"iiiiii")):0;var i;let u=ue(e),a=function(e){let n=e(ee),t=E[ee>>2];if(0==t)return null;let r=A.subarray(t,t+n);return r.heapAddr=t,r}(e=>(function(e,n){const t=function(e){return e instanceof Uint8Array?e:new Uint8Array(e)}(e),r=t.length,o=Z(t,r),i=n(o,r);return function(e){P(e);}(o),i})(u,(n,i)=>B(n,i,t,r,e,o)));return n.onCodeBlock&&G(o),function(){let e=function(){let e=F();if(0!=e){let n=O(),t=0!=n?UTF8ArrayToString(A,n):"";return k(),new WError(e,t)}}();if(e)throw e}(),n.bytes||n.asMemoryView?a:ne.decode(a)}function ue(e){return "string"==typeof e?ne.encode(e):e instanceof Uint8Array?e:new Uint8Array(e)}
 
 const isWin$1 = process.platform === 'win32';
 const SEP = isWin$1 ? `\\\\+` : `\\/`;
@@ -7154,7 +7160,7 @@ function globrex(glob, {extended = false, globstar = false, strict = false, file
 
 var globrex_1 = globrex;
 
-const isWin = os__default['default'].platform() === 'win32';
+const isWin = os__default["default"].platform() === 'win32';
 
 const CHARS = { '{': '}', '(': ')', '[': ']'};
 const STRICT = /\\(.)|(^!|\*|[\].+)]\?|\[[^\\\]]+\]|\{[^\\}]+\}|\(\?[:!=][^\\)]+\)|\([^|]+\|[^\\)]+\)|(\\).|([@?!+*]\(.*\)))/;
@@ -7206,7 +7212,7 @@ function parent(str, { strict = false } = {}) {
 	// preserves full path in case of trailing path separator
 	str += 'a';
 
-	do {str = path__default['default'].dirname(str);}
+	do {str = path__default["default"].dirname(str);}
 	while (isglob(str, {strict}) || /(^|[^\\])([\{\[]|\([^\)]+$)/.test(str));
 
 	// remove escape chars and return result
@@ -7233,7 +7239,7 @@ function globalyzer(pattern, opts = {}) {
     }
 
     if (!isGlob) {
-        base = path__default['default'].dirname(pattern);
+        base = path__default["default"].dirname(pattern);
         glob = base !== '.' ? pattern.substr(base.length) : pattern;
     }
 
@@ -7246,12 +7252,12 @@ function globalyzer(pattern, opts = {}) {
 
 var src$1 = globalyzer;
 
-const { promisify } = util__default['default'];
+const { promisify } = util__default["default"];
 
-const { join, resolve, relative } = path__default['default'];
+const { join, resolve, relative } = path__default["default"];
 const isHidden = /(^|[\\\/])\.[^\\\/\.]/g;
-const readdir = promisify(fs__default['default'].readdir);
-const stat = promisify(fs__default['default'].stat);
+const readdir = promisify(fs__default["default"].readdir);
+const stat = promisify(fs__default["default"].stat);
 let CACHE = {};
 
 async function walk(output, prefix, lexer, opts, dirname='', level=0) {
@@ -7270,7 +7276,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
     isMatch = lexer.regex.test(relpath);
 
     if ((stats=CACHE[relpath]) === void 0) {
-      CACHE[relpath] = stats = fs__default['default'].lstatSync(fullpath);
+      CACHE[relpath] = stats = fs__default["default"].lstatSync(fullpath);
     }
 
     if (!stats.isDirectory()) {
@@ -7621,27 +7627,6 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 });
 
 var _toConsumableArray = unwrapExports(toConsumableArray);
-
-var asyncIterator = createCommonjsModule(function (module) {
-function _asyncIterator(iterable) {
-  var method;
-
-  if (typeof Symbol !== "undefined") {
-    if (Symbol.asyncIterator) method = iterable[Symbol.asyncIterator];
-    if (method == null && Symbol.iterator) method = iterable[Symbol.iterator];
-  }
-
-  if (method == null) method = iterable["@@asyncIterator"];
-  if (method == null) method = iterable["@@iterator"];
-  if (method == null) throw new TypeError("Object is not async iterable");
-  return method.call(iterable);
-}
-
-module.exports = _asyncIterator;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-});
-
-var _asyncIterator = unwrapExports(asyncIterator);
 
 function isNothing(subject) {
   return (typeof subject === 'undefined') || (subject === null);
@@ -11847,6 +11832,10 @@ function _arrayLikeToArray$1(arr, len) { if (len == null || len > arr.length) le
 function ownKeys$2(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread$2(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$2(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$2(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _asyncIterator(iterable) { var method, async, sync, retry = 2; if (typeof Symbol !== "undefined") { async = Symbol.asyncIterator; sync = Symbol.iterator; } while (retry--) { if (async && (method = iterable[async]) != null) { return method.call(iterable); } if (sync && (method = iterable[sync]) != null) { return new AsyncFromSyncIterator(method.call(iterable)); } async = "@@asyncIterator"; sync = "@@iterator"; } throw new TypeError("Object is not async iterable"); }
+
+function AsyncFromSyncIterator(s) { AsyncFromSyncIterator = function AsyncFromSyncIterator(s) { this.s = s; this.n = s.next; }; AsyncFromSyncIterator.prototype = { s: null, n: null, next: function next() { return AsyncFromSyncIteratorContinuation(this.n.apply(this.s, arguments)); }, "return": function _return(value) { var ret = this.s["return"]; if (ret === undefined) { return Promise.resolve({ value: value, done: true }); } return AsyncFromSyncIteratorContinuation(ret.apply(this.s, arguments)); }, "throw": function _throw(value) { var thr = this.s["return"]; if (thr === undefined) return Promise.reject(value); return AsyncFromSyncIteratorContinuation(thr.apply(this.s, arguments)); } }; function AsyncFromSyncIteratorContinuation(r) { if (Object(r) !== r) { return Promise.reject(new TypeError(r + " is not an object.")); } var done = r.done; return Promise.resolve(r.value).then(function (value) { return { value: value, done: done }; }); } return new AsyncFromSyncIterator(s); }
 var emptyCache = {
   body: "",
   data: {},
@@ -11857,7 +11846,7 @@ var emptyCache = {
 var emptyFrontMatter = {
   attributes: _objectSpread$2({
     title: ""
-  }, Object.keys(jsYaml$2.load(fs__default['default'].readFileSync(siteFiles().settings, "utf-8")).rev_share_contribution_per_chapter).reduce(function (prev, cur) {
+  }, Object.keys(jsYaml$2.load(fs__default["default"].readFileSync(siteFiles().settings, "utf-8")).rev_share_contribution_per_chapter).reduce(function (prev, cur) {
     prev[cur] = {};
     return prev;
   }, {})),
@@ -11869,7 +11858,7 @@ function parseMarkdown(_x, _x2, _x3) {
 
 function _parseMarkdown() {
   _parseMarkdown = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(novel, files, opts) {
-    var content, chapters, chapterTitles, contributions, unregisteredContributors, unchangedFiles, cache, folder, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _loop, _iterator, _step, _value;
+    var content, chapters, chapterTitles, contributions, unregisteredContributors, unchangedFiles, cache, folder, _iteratorAbruptCompletion, _didIteratorError, _iteratorError, _loop, _iterator, _step;
 
     return regenerator.wrap(function _callee2$(_context2) {
       while (1) {
@@ -11882,16 +11871,16 @@ function _parseMarkdown() {
             unregisteredContributors = [];
             unchangedFiles = 0;
             folder = cacheFiles();
-            if (!fs__default['default'].existsSync(folder.folder)) fs__default['default'].mkdirSync(folder.folder);
+            if (!fs__default["default"].existsSync(folder.folder)) fs__default["default"].mkdirSync(folder.folder);
 
             try {
-              cache = JSON.parse(fs__default['default'].readFileSync(folder.novelCompileCache(novel), "utf-8")) || {};
+              cache = JSON.parse(fs__default["default"].readFileSync(folder.novelCompileCache(novel), "utf-8")) || {};
             } catch (err) {
               // @ts-ignore
               cache = {};
             }
 
-            _iteratorNormalCompletion = true;
+            _iteratorAbruptCompletion = false;
             _didIteratorError = false;
             _context2.prev = 11;
             _loop = /*#__PURE__*/regenerator.mark(function _callee() {
@@ -11903,9 +11892,9 @@ function _parseMarkdown() {
                 while (1) {
                   switch (_context.prev = _context.next) {
                     case 0:
-                      file = _value;
+                      file = _step.value;
                       frontmatter = void 0;
-                      lastModified = fs__default['default'].statSync(file).mtime.getTime();
+                      lastModified = fs__default["default"].statSync(file).mtime.getTime();
                       index = file.split("chapter-")[1].slice(0, -3);
                       book = file.split("contents/")[1].split("/chapter")[0];
                       name = "".concat(book, "/chapter-").concat(index);
@@ -11931,7 +11920,7 @@ function _parseMarkdown() {
 
                       if (hasChanged) {
                         if (opts !== null && opts !== void 0 && opts.hash) cache[file].hash = hash;
-                        frontmatter = frontMatter(fs__default['default'].readFileSync(file, "utf-8"));
+                        frontmatter = frontMatter(fs__default["default"].readFileSync(file, "utf-8"));
                         _iterator2 = _createForOfIteratorHelper$1(contributionRoles.get());
 
                         try {
@@ -12029,65 +12018,57 @@ function _parseMarkdown() {
             return _iterator.next();
 
           case 16:
-            _step = _context2.sent;
-            _iteratorNormalCompletion = _step.done;
-            _context2.next = 20;
-            return _step.value;
-
-          case 20:
-            _value = _context2.sent;
-
-            if (_iteratorNormalCompletion) {
-              _context2.next = 26;
+            if (!(_iteratorAbruptCompletion = !(_step = _context2.sent).done)) {
+              _context2.next = 21;
               break;
             }
 
-            return _context2.delegateYield(_loop(), "t0", 23);
+            return _context2.delegateYield(_loop(), "t0", 18);
 
-          case 23:
-            _iteratorNormalCompletion = true;
+          case 18:
+            _iteratorAbruptCompletion = false;
             _context2.next = 14;
             break;
 
-          case 26:
-            _context2.next = 32;
+          case 21:
+            _context2.next = 27;
             break;
 
-          case 28:
-            _context2.prev = 28;
+          case 23:
+            _context2.prev = 23;
             _context2.t1 = _context2["catch"](11);
             _didIteratorError = true;
             _iteratorError = _context2.t1;
 
-          case 32:
-            _context2.prev = 32;
-            _context2.prev = 33;
+          case 27:
+            _context2.prev = 27;
+            _context2.prev = 28;
 
-            if (!(!_iteratorNormalCompletion && _iterator["return"] != null)) {
-              _context2.next = 37;
+            if (!(_iteratorAbruptCompletion && _iterator["return"] != null)) {
+              _context2.next = 32;
               break;
             }
 
-            _context2.next = 37;
+            _context2.next = 32;
             return _iterator["return"]();
 
-          case 37:
-            _context2.prev = 37;
+          case 32:
+            _context2.prev = 32;
 
             if (!_didIteratorError) {
-              _context2.next = 40;
+              _context2.next = 35;
               break;
             }
 
             throw _iteratorError;
 
-          case 40:
-            return _context2.finish(37);
-
-          case 41:
+          case 35:
             return _context2.finish(32);
 
-          case 42:
+          case 36:
+            return _context2.finish(27);
+
+          case 37:
             return _context2.abrupt("return", {
               content: content,
               chapters: chapters,
@@ -12098,12 +12079,12 @@ function _parseMarkdown() {
               cache: cache
             });
 
-          case 43:
+          case 38:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[11, 28, 32, 42], [33,, 37, 41]]);
+    }, _callee2, null, [[11, 23, 27, 37], [28,, 32, 36]]);
   }));
   return _parseMarkdown.apply(this, arguments);
 }
@@ -12148,12 +12129,18 @@ var Log = /*#__PURE__*/function () {
   function Log(opts) {
     _classCallCheck(this, Log);
 
-    this.marginTop = 1;
-    this.marginBottom = 2;
-    this.marginLeft = 4;
-    this.padding = 2;
-    this.width = 100;
-    this.withBorders = false;
+    _defineProperty(this, "marginTop", 1);
+
+    _defineProperty(this, "marginBottom", 2);
+
+    _defineProperty(this, "marginLeft", 4);
+
+    _defineProperty(this, "padding", 2);
+
+    _defineProperty(this, "width", 100);
+
+    _defineProperty(this, "withBorders", false);
+
     this.borderText = Array(this.width).fill("*").join("");
     if (opts !== null && opts !== void 0 && opts.withBorders) this.withBorders = opts.withBorders;
     if (opts !== null && opts !== void 0 && opts.marginTop) this.marginTop = opts.marginTop;
@@ -12304,7 +12291,7 @@ function _generateMetadata() {
               var novelContributors;
 
               try {
-                novelContributors = jsYaml$2.load(fs__default['default'].readFileSync(novelFiles(novel).contributorsConfig));
+                novelContributors = jsYaml$2.load(fs__default["default"].readFileSync(novelFiles(novel).contributorsConfig));
               } catch (err) {
                 console.error(source.bold.red("Can't find contributors.yml for novel ".concat(novel, ".")));
               }
@@ -12445,7 +12432,7 @@ function _compileChapter() {
                         chapterList = lib(chapters);
                         benchmark.sorting_chapters.end = perf_hooks.performance.now();
                         benchmark.filesystem.start = perf_hooks.performance.now();
-                        info = jsYaml$2.load(fs__default['default'].readFileSync(novelFiles(novel).info, "utf8"));
+                        info = jsYaml$2.load(fs__default["default"].readFileSync(novelFiles(novel).info, "utf8"));
                         info.genre = info.genre.split(",").filter(function (s) {
                           return !!s;
                         }).map(function (s) {
@@ -12458,7 +12445,7 @@ function _compileChapter() {
                         }); // await markdown.ready;
 
                         // await markdown.ready;
-                        synopsis = ie(fs__default['default'].readFileSync(novelFiles(novel).synopsis, "utf8"));
+                        synopsis = ie(fs__default["default"].readFileSync(novelFiles(novel).synopsis, "utf8"));
                         meta = _objectSpread$1(_objectSpread$1({
                           id: novel
                         }, info), {}, {
@@ -12529,11 +12516,11 @@ function generateFiles(_ref) {
     chapterTitles: chapterTitles,
     content: content
   };
-  fs__default['default'].writeFileSync(publishFiles().novelMetadata(novel), JSON.stringify(meta, null, 4));
-  fs__default['default'].writeFileSync(publishFiles().novelChapterTitles(novel), JSON.stringify(chapterTitles));
-  fs__default['default'].writeFileSync(cacheFiles().novelCompileCache(novel), JSON.stringify(cache || {}), "utf-8");
-  fs__default['default'].writeFileSync(publishFiles().novelCompiledContent(novel), JSON.stringify(content));
-  fs__default['default'].writeFileSync(publishFiles().novelBinary(novel), JSON.stringify(bin));
+  fs__default["default"].writeFileSync(publishFiles().novelMetadata(novel), JSON.stringify(meta, null, 4));
+  fs__default["default"].writeFileSync(publishFiles().novelChapterTitles(novel), JSON.stringify(chapterTitles));
+  fs__default["default"].writeFileSync(cacheFiles().novelCompileCache(novel), JSON.stringify(cache || {}), "utf-8");
+  fs__default["default"].writeFileSync(publishFiles().novelCompiledContent(novel), JSON.stringify(content));
+  fs__default["default"].writeFileSync(publishFiles().novelBinary(novel), JSON.stringify(bin));
 }
 
 function getSiteContributors() {
@@ -12555,7 +12542,7 @@ function generateSiteSettings() {
   var settings;
 
   try {
-    settings = jsYaml$2.load(fs__default['default'].readFileSync(siteFiles().settings));
+    settings = jsYaml$2.load(fs__default["default"].readFileSync(siteFiles().settings));
   } catch (_) {
     errorSiteSettingsNotFound();
   }
@@ -12570,7 +12557,7 @@ function generateSiteSettings() {
   }
 
   ensurePublishDirectoryExist();
-  fs__default['default'].writeFileSync(publishFiles().siteMetadata, JSON.stringify(settings, null, 4));
+  fs__default["default"].writeFileSync(publishFiles().siteMetadata, JSON.stringify(settings, null, 4));
   contributionRoles.set(settings.contribution_roles);
   revSharePerChapter.set(settings["rev_share_contribution_per_chapter"]);
   return settings;
@@ -12638,7 +12625,7 @@ unwrapExports(arrayWithHoles);
 
 var iterableToArrayLimit = createCommonjsModule(function (module) {
 function _iterableToArrayLimit(arr, i) {
-  var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
 
   if (_i == null) return;
   var _arr = [];
@@ -12904,7 +12891,7 @@ var imageExtensions = getCjsExportFromNamespace(imageExtensions$2);
 
 const extensions = new Set(imageExtensions);
 
-var isImage = filePath => extensions.has(path__default['default'].extname(filePath).slice(1).toLowerCase());
+var isImage = filePath => extensions.has(path__default["default"].extname(filePath).slice(1).toLowerCase());
 
 function pickImage(_x) {
   return _pickImage.apply(this, arguments);
@@ -12982,9 +12969,9 @@ var fail = createCommonjsModule(function (module, exports) {
     };
   }
 
-  var os__default$1 = /*#__PURE__*/_interopDefaultLegacy(os__default['default']);
+  var os__default$1 = /*#__PURE__*/_interopDefaultLegacy(os__default["default"]);
 
-  var tty__default$1 = /*#__PURE__*/_interopDefaultLegacy(tty__default['default']);
+  var tty__default$1 = /*#__PURE__*/_interopDefaultLegacy(tty__default["default"]);
 
   function createCommonjsModule(fn, module) {
     return module = {
