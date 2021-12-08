@@ -1,6 +1,6 @@
 {
   "name": "@prognovel/cli",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A repo to manage contents of ProgNovel platform.",
   "main": ".prognovel/bin",
   "bin": ".prognovel/bin/index.js",
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ProgNovel/prognovel-contents.git"
+    "url": "git+https://github.com/prognoveljs/prognovel-cli.git"
   },
   "author": "ProgNovel",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ProgNovel/prognovel-contents/issues"
+    "url": "https://github.com/prognoveljs/prognovel-cli/issues"
   },
-  "homepage": "https://github.com/ProgNovel/prognovel-contents#readme",
+  "homepage": "https://github.com/prognoveljs/prognovel-cli#readme",
   "dependencies": {
     "alphanum-sort": "^1.0.2",
     "archiver": "^5.3.0",
