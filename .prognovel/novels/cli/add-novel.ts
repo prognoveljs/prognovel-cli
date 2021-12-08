@@ -1,9 +1,9 @@
 import { mkdirSync, readFileSync, copyFileSync, writeFileSync } from "fs";
-import { errorSiteSettingsNotFound } from "../../.dist/fail";
 import { load, dump } from "js-yaml";
 import { siteFiles } from "../../_files";
 import { failBuild } from "../../utils/build";
 import { checkIDString } from "../../utils/check-valid-book-folder";
+import { errorSiteSettingsNotFound } from "../../utils/build/fail";
 
 export function addNovel(novel: string) {
   if (!checkIDString(novel)) {
@@ -29,8 +29,8 @@ https://www.w3schools.io/file/yaml-arrays/`);
 
   mkdirSync(`novels/${novel}/contents/volume-1`, { recursive: true });
   writeFileSync(`novels/${novel}/contents/volume-1/chapter-1.md`, chapterTemplate, "utf-8");
-  copyFileSync(require.main.path + "/assets/banner.jpeg", `novels/${novel}/banner.jpeg`);
-  copyFileSync(require.main.path + "/assets/cover.png", `novels/${novel}/cover.png`);
+  copyFileSync(process.env.MAIN_PATH + "/assets/banner.jpeg", `novels/${novel}/banner.jpeg`);
+  copyFileSync(process.env.MAIN_PATH + "/assets/cover.png", `novels/${novel}/cover.png`);
 
   Object.keys(novelConfigFiles).forEach((file) => {
     writeFileSync(`novels/${novel}/` + file, novelConfigFiles[file], "utf-8");

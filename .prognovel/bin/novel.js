@@ -36,7 +36,11 @@ exports.handler = async function (argv) {
 
   switch (cmd) {
     case "add":
-      require("../.dist/main").addNovel(novel);
+      try {
+        require("../.dist/main").addNovel(novel);
+      } catch (error) {
+        console.log(error);
+      }
       break;
     case "remove":
       console.log(
