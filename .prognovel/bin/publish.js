@@ -12,7 +12,6 @@ try {
 const { pickImage } = main;
 const imageType = require("image-type");
 const fetch = require("node-fetch");
-const FormData = require("form-data");
 exports.command = "publish";
 // exports.aliases = ["build", "b"];
 

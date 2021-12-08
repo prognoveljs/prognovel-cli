@@ -1,7 +1,6 @@
 const fetch = require("node-fetch");
 const CF_API_BASE_ENDPOINT = "https://api.cloudflare.com/client/v4/";
 const { CF_ACCOUNT_ID, CF_NAMESPACE_ID, CF_API_TOKEN } = process.env;
-const { FormData } = require("formdata-node");
 
 function cfWorkerKV() {
   return {
