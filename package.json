@@ -10,7 +10,6 @@
     "build:types": "tsc --emitDeclarationOnly",
     "build:both": "npm run build:types && npm run build",
     "build": "rollup -c",
-    "publish": "npm run build && git add . && git commit -m \"update novels...\" && git push",
     "dev": "node .prognovel/.development/server.js",
     "format": "prettier --write .prognovel/**/*.{ts,js,md}",
     "test": "test",
