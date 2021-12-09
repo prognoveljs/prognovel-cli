@@ -24,7 +24,9 @@ After your contents already published in your backend, you are ready to install 
 
 ### General rules for ProgNovel app
 
-(WIP)
+1. Comments and discussions are disabled until you set the value of `disqus_id` in `site-settings.yml` file with [Disqus shortname](https://help.disqus.com/en/articles/1717084-javascript-configuration-variables#:~:text=Tells%20the%20Disqus,your%20forum%20shortname!).
+2. `image_resizer_service` in `site-settings.yml` connect ProgNovel with remote image optimization service. Image resize service optimize image size of novel banner significantly, allowing some pages to load faster. Original images will be used instead if `image_resizer_service` is empty, which is not ideal for mobile users. <br/>As for now, ProgNovel only supports [imaginary](https://github.com/h2non/imaginary) image optimization microservice, though it might change in the future. Learn how to self-host `imaginary` microservice [here](https://fly.io/docs/app-guides/run-a-global-image-service/).
+3. You might want to configure how contributors or staffs are getting paid with Web Monetization revenue share. ProgNovel pays differently between site operational staffs and novel/content staffs (such as authors, editors, proofreaders, etc). Learn the difference [here](https://demo.prognovel.com/help/monetization).
 
 ### Rules for novels
 
@@ -35,7 +37,7 @@ This rules mainly applies for configs and naming convention inside folder `novel
 3. You notice chapters of your novels are inside volume. You can create folders of volume inside `novels/{your-novel-folder}/contents` folder, to separate chapters into several books. Like chapter, volume is formatted to have dash `-` instead of space, though you are free to decide their prefix.
 4. ProgNovel will index chapters order with Alphanum sort. This is a bit  similar to how Windows Explorer sort names of files. Therefore as a rule of thumb, you can sort the index of your chapters just by having the name sort active in your Explorer - for example `chapter-1.md`, `chapter-2.md`, `chapter-3.md` will sorted with ascending order inside ProgNovel's table of content.
 5. You can split a chapter or simply having an extra by having it formatted with an extra dash after the chapter index. For example, if you have an extra chapter after Chapter 3 and want to index this extra chapter as Chapter 3.5, you can format the name of chapter markdown as `chapter-3-5.md`. This is also valid when you split chapters into several part with the format, for example, `chapter-5-1.md` then havving to proceed to `chapter-5-2.md`, so on. 
-6. To give a title inside a chapter, you have to create frontmatter part inside the markdown. Chapter frontmatter can handle `title` attribute, as well as `monetization` to enable Web Monetization chapter lock and also list contributors for that particular chapter. For example:
+6. To give a title inside a chapter, you have to create frontmatter part inside the markdown. Frontmatter located at the start of chapter markdown file, with three dash line `---` wrapping above and below the frontmatter attributes. Chapter frontmatter can handle `title` attribute, as well as `monetization` to enable Web Monetization chapter lock and also list contributors for that particular chapter. For example:
 
 ```md
 ---
@@ -51,3 +53,5 @@ Bla bla bla this is the content of chapter...
 7. Also inside chapters' frontmatters, you can specify how authors and other novel staffs/contributors are being paid with Web Monetization revenue share. As you notice in example in step (6), in the frontmatter beside `title` and `monetization` attributes we got `author` and `editor`. For every person credited with roles, they'll have more shares in Web Monetization revenue share, accumulates for every chapters they are part in. The kind of roles you can assign in chapters' frontmatters and their rate per chapter is configured in `site-settings.yml` in your root project folder, under the variable `rev_share_contribution_per_chapter` (which you can add or remove roles as well as their rates). For ProgNovel to recognize novel authors/staffs/contributors in chapters' frontmatters, you need to specify their names and payment pointers in `contributors.yml` in your novel folder (note that this is different from `site-contributors.yml` in your root project folder).
 
 8. (Optional) for more information about how revenue share for novel authors and contributors works, read [https://demo.prognovel.com/help/monetization/3-setup-web-monetization-novel-staff](https://demo.prognovel.com/help/monetization/3-setup-web-monetization-novel-staff).
+
+9. (Optional) You can point Discord server as the novel community by setting the value of `discord_group_id` in `info.yml`. You can easily get your Discord server ID by turning developer mode on in they advanced setting of your account settings, then right click your server to show the `Copy ID` option.
