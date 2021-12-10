@@ -1,9 +1,12 @@
 {
   "name": "@prognovel/cli",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "A repo to manage contents of ProgNovel platform.",
   "main": ".prognovel/bin",
-  "bin": ".prognovel/bin/index.js",
+  "bin": {
+    "prognovel": ".prognovel/bin/index.js"
+  },
+  "preferGlobal": true,
   "scripts": {
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
