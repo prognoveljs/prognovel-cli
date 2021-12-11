@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import * as markdown from "markdown-wasm";
+import markdown from "markdown-wasm/dist/markdown.node";
 import fm from "front-matter";
 import { createHashFromFile } from "../../utils/hash-file";
 import { contributionRoles, revSharePerChapter, contributors } from "../contributors";
