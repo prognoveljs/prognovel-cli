@@ -1,7 +1,7 @@
 import fs from "fs";
 import yaml from "js-yaml";
 import chalk from "chalk";
-import markdown from "markdown-wasm/dist/markdown.node";
+import * as markdown from "markdown-wasm";
 import glob from "tiny-glob";
 import { performance } from "perf_hooks";
 import { checkValidBookFolder, ensurePublishDirectoryExist } from "../utils/check-valid-book-folder";

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 require("dotenv").config();
+require("source-map-support").install();
 
 process.env.MAIN_PATH = require.main.path;
 
@@ -15,5 +16,6 @@ require("yargs")
   .command(require("./publish"))
   .command(require("./new"))
   .command(require("./novel"))
+  .command(require("./gui"))
   .command(require("./fix-typo"))
   .command(require("./check")).argv;

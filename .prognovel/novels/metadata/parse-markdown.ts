@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import markdown from "markdown-wasm/dist/markdown.node";
+import * as markdown from "markdown-wasm";
 import fm from "front-matter";
 import { createHashFromFile } from "../../utils/hash-file";
 import { contributionRoles, revSharePerChapter, contributors } from "../contributors";
@@ -54,6 +54,7 @@ export async function parseMarkdown(
   files: string[],
   opts?: Options,
 ): Promise<parsingMarkdownResult> {
+  // await markdown.ready;
   let content = {};
   let chapters: Array<string> = [];
   let chapterTitles: ChapterTitles = {};
@@ -113,7 +114,11 @@ export async function parseMarkdown(
       cache[file].contributions = calculatedRevenueShare;
       cache[file].lastModified = lastModified;
       cache[file].data = frontmatter.attributes;
-      cache[file].body = markdown.parse(frontmatter.body);
+      try {
+        cache[file].body = markdown.parse(frontmatter.body);
+      } catch (error) {
+        console.log(error);
+      }
       cache[file].unregistered = unregistered;
       cache.assignedRoles = contributionRoles.contributorAssignedRoles;
     } else {

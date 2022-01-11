@@ -10,10 +10,12 @@ specifiers:
   '@babel/preset-typescript': ^7.16.0
   '@babel/runtime': ^7.16.3
   '@rollup/plugin-wasm': ^5.1.2
+  '@types/ws': ^8.2.2
   alphanum-sort: ^1.0.2
   archiver: ^5.3.0
   babel-eslint: ^10.1.0
   brotli: ^1.3.2
+  bufferutil: ^4.0.6
   chalk: ^4.1.2
   dessert-yaml-js: ^1.0.3
   dotenv: ^10.0.0
@@ -43,17 +45,21 @@ specifiers:
   rollup-plugin-sourcemaps: ^0.6.3
   rollup-plugin-typescript2: ^0.30.0
   sharp: ^0.28.3
+  source-map-support: ^0.5.21
   string-similarity: ^4.0.4
   tiny-glob: ^0.2.9
   toml: ^3.0.0
   typescript: ^4.5.2
+  utf-8-validate: ^5.0.8
   wasm-frontmatter: ^1.0.1
+  ws: ^8.4.0
   yargs: ^17.3.0
 
 dependencies:
   alphanum-sort: 1.0.2
   archiver: 5.3.0
   brotli: 1.3.2
+  bufferutil: 4.0.6
   chalk: 4.1.2
   dessert-yaml-js: 1.0.3
   dotenv: 10.0.0
@@ -69,10 +75,13 @@ dependencies:
   polka: 0.5.2
   readline-promise: 1.0.5
   sharp: 0.28.3
+  source-map-support: 0.5.21
   string-similarity: 4.0.4
   tiny-glob: 0.2.9
   toml: 3.0.0
+  utf-8-validate: 5.0.8
   wasm-frontmatter: 1.0.1
+  ws: 8.4.0_bffff4271b89d628e8333ead80d3d8e8
   yargs: 17.3.0
 
 devDependencies:
@@ -85,6 +94,7 @@ devDependencies:
   '@babel/preset-typescript': 7.16.0_@babel+core@7.16.0
   '@babel/runtime': 7.16.3
   '@rollup/plugin-wasm': 5.1.2_rollup@2.60.2
+  '@types/ws': 8.2.2
   babel-eslint: 10.1.0_eslint@7.32.0
   eslint: 7.32.0
   eslint-config-prettier: 7.2.0_eslint@7.32.0
@@ -1398,6 +1408,12 @@ packages:
       '@types/node': 16.11.12
     dev: true
 
+  /@types/ws/8.2.2:
+    resolution: {integrity: sha512-NOn5eIcgWLOo6qW8AcuLZ7G8PycXu0xTxxkS6Q18VWFxgPUSOwV0pBj2a/4viNZVu25i7RIB7GttdkAIUUXOOg==}
+    dependencies:
+      '@types/node': 16.11.12
+    dev: true
+
   /abstract-leveldown/0.12.4:
     resolution: {integrity: sha1-KeGOYy5g5OIh1YECR4UqY9ey5BA=}
     dependencies:
@@ -1978,7 +1994,6 @@ packages:
 
   /buffer-from/1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
-    dev: true
 
   /buffer-xor/1.0.3:
     resolution: {integrity: sha1-JuYe0UIvtw3ULm42cp7VHYVf6Nk=}
@@ -1989,6 +2004,14 @@ packages:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
+    dev: false
+
+  /bufferutil/4.0.6:
+    resolution: {integrity: sha512-jduaYOYtnio4aIAyc6UbvPCVcgq7nYpVnucyxr6eCYg/Woad9Hf/oxxBRDnGGjPfjUm6j5O/uBWhIu4iLebFaw==}
+    engines: {node: '>=6.14.2'}
+    requiresBuild: true
+    dependencies:
+      node-gyp-build: 4.3.0
     dev: false
 
   /builtin-modules/3.2.0:
@@ -3579,6 +3602,11 @@ packages:
       whatwg-url: 5.0.0
     dev: false
 
+  /node-gyp-build/4.3.0:
+    resolution: {integrity: sha512-iWjXZvmboq0ja1pUGULQBexmxq8CV4xBhX7VDOTbL7ZR4FOowwY/VOtRxBN/yKxmdGoIp4j5ysNT4u3S2pDQ3Q==}
+    hasBin: true
+    dev: false
+
   /node-releases/2.0.1:
     resolution: {integrity: sha512-CqyzN6z7Q6aMeF/ktcMVTzhAHCEpf8SOarwpzpf8pNBY2k5/oM34UHldUwp8VKI7uxct2HxSRdJjBaZeESzcxA==}
     dev: true
@@ -4387,6 +4415,13 @@ packages:
       source-map: 0.5.7
     dev: true
 
+  /source-map-support/0.5.21:
+    resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
+    dependencies:
+      buffer-from: 1.1.2
+      source-map: 0.6.1
+    dev: false
+
   /source-map/0.5.7:
     resolution: {integrity: sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=}
     engines: {node: '>=0.10.0'}
@@ -4395,7 +4430,6 @@ packages:
   /source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
@@ -4672,6 +4706,14 @@ packages:
       punycode: 2.1.1
     dev: true
 
+  /utf-8-validate/5.0.8:
+    resolution: {integrity: sha512-k4dW/Qja1BYDl2qD4tOMB9PFVha/UJtxTc1cXYOe3WwA/2m0Yn4qB7wLMpJyLJ/7DR0XnTut3HsCSzDT4ZvKgA==}
+    engines: {node: '>=6.14.2'}
+    requiresBuild: true
+    dependencies:
+      node-gyp-build: 4.3.0
+    dev: false
+
   /util-deprecate/1.0.2:
     resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
 
@@ -4734,6 +4776,22 @@ packages:
 
   /wrappy/1.0.2:
     resolution: {integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=}
+
+  /ws/8.4.0_bffff4271b89d628e8333ead80d3d8e8:
+    resolution: {integrity: sha512-IHVsKe2pjajSUIl4KYMQOdlyliovpEPquKkqbwswulszzI7r0SfQrxnXdWAEqOlDCLrVSJzo+O1hAwdog2sKSQ==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dependencies:
+      bufferutil: 4.0.6
+      utf-8-validate: 5.0.8
+    dev: false
 
   /xtend/2.0.6:
     resolution: {integrity: sha1-XqZXptukRwacLlnFihE4ywxebO4=}
