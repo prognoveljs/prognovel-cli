@@ -8,6 +8,7 @@ import { failBuild } from "./utils/build";
 import { pickImage } from "./utils/image";
 import { novelFiles, publishFiles, siteFiles } from "./_files";
 import { addNovel } from "./novels/cli/add-novel";
+import { initializeGUIServer } from "./gui";
 
 async function init(opts?: any) {
   console.log("Initialize on folder:", process.cwd());
@@ -38,6 +39,7 @@ export {
   siteFiles,
   novelFiles,
   publishFiles,
+  initializeGUIServer,
 };
 
 // init();

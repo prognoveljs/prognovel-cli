@@ -5,6 +5,7 @@ import json from "rollup-plugin-json";
 import babel from "rollup-plugin-babel";
 import { wasm } from "@rollup/plugin-wasm";
 import sourcemap from "rollup-plugin-sourcemaps";
+import { markdownWasmOutput } from "./.prognovel/utils/wasm";
 // import regenerator from "rollup-plugin-regenerator";
 // import builtins from "rollup-plugin-node-builtins";
 // import sourcemap from "rollup-plugin-sourcemaps";
@@ -28,6 +29,7 @@ const plugins = [
     include: [".prognovel/**/*"],
     runtimeHelpers: true,
   }),
+  markdownWasmOutput(),
 ];
 
 export default [
@@ -37,7 +39,7 @@ export default [
       file: ".prognovel/.dist/main.js",
       name: "prognovel-contents",
       format: "cjs",
-      sourcemap: false,
+      sourcemap: true,
     },
     // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
     external: ["sharp"],
