@@ -46,7 +46,7 @@ export async function generateMetadata(novels: string[]) {
     const novel = folder.split("novels/")[1];
     let novelContributors;
     try {
-      novelContributors = yaml.load(fs.readFileSync(novelFiles(novel).contributorsConfig));
+      novelContributors = yaml.load(fs.readFileSync(novelFiles(novel).contributorsConfig, "utf-8"));
     } catch (err) {
       console.error(chalk.bold.red(`Can't find contributors.yml for novel ${novel}.`));
     }
@@ -80,7 +80,7 @@ async function compileChapter(folder: string, images, novel: string) {
     benchmark.sorting_chapters.end = performance.now();
 
     benchmark.filesystem.start = performance.now();
-    const info = yaml.load(fs.readFileSync(novelFiles(novel).info, "utf8"));
+    const info: any = yaml.load(fs.readFileSync(novelFiles(novel).info, "utf8"));
     info.genre = info.genre
       .split(",")
       .filter((s: string) => !!s)

@@ -6,7 +6,7 @@ import type { ChapterData } from "./chapter";
 export function generateContributorData(chapterData: any, novel: string): ChapterData {
   let { contributors, title, body, monetization, banner } = chapterData;
   const config = novelFiles(novel).contributorsConfig;
-  const contributorData = load(readFileSync(config));
+  const contributorData = load(readFileSync(config, "utf-8"));
 
   return {
     title,

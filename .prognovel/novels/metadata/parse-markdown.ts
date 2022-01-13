@@ -40,7 +40,7 @@ const emptyFrontMatter: FrontMatter = {
   attributes: {
     title: "",
     ...Object.keys(
-      yaml.load(fs.readFileSync(siteFiles().settings, "utf-8")).rev_share_contribution_per_chapter,
+      (yaml.load(fs.readFileSync(siteFiles().settings, "utf-8")) as any).rev_share_contribution_per_chapter,
     ).reduce((prev, cur) => {
       prev[cur] = {};
       return prev;

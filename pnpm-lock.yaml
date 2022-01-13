@@ -10,6 +10,7 @@ specifiers:
   '@babel/preset-typescript': ^7.16.0
   '@babel/runtime': ^7.16.3
   '@rollup/plugin-wasm': ^5.1.2
+  '@types/js-yaml': ^4.0.5
   '@types/ws': ^8.2.2
   alphanum-sort: ^1.0.2
   archiver: ^5.3.0
@@ -94,6 +95,7 @@ devDependencies:
   '@babel/preset-typescript': 7.16.0_@babel+core@7.16.0
   '@babel/runtime': 7.16.3
   '@rollup/plugin-wasm': 5.1.2_rollup@2.60.2
+  '@types/js-yaml': 4.0.5
   '@types/ws': 8.2.2
   babel-eslint: 10.1.0_eslint@7.32.0
   eslint: 7.32.0
@@ -1390,6 +1392,10 @@ packages:
       '@types/minimatch': 3.0.5
       '@types/node': 16.11.12
     dev: false
+
+  /@types/js-yaml/4.0.5:
+    resolution: {integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==}
+    dev: true
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}

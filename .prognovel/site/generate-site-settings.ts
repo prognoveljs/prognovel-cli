@@ -7,9 +7,9 @@ import { publishFiles, siteFiles } from "../_files";
 import { getSiteContributors } from "./site-contributors-data";
 
 export function generateSiteSettings() {
-  let settings;
+  let settings: any;
   try {
-    settings = yaml.load(fs.readFileSync(siteFiles().settings));
+    settings = yaml.load(fs.readFileSync(siteFiles().settings, "utf-8"));
   } catch (_) {
     errorSiteSettingsNotFound();
   }

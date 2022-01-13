@@ -12,7 +12,7 @@ Use dash "-" to separate words instead of space.`);
   }
   let settings;
   try {
-    settings = load(readFileSync(siteFiles().settings), "utf-8");
+    settings = load(readFileSync(siteFiles().settings, "utf-8"));
   } catch (_) {
     errorSiteSettingsNotFound();
   }
