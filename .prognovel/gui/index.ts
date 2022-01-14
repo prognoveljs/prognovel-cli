@@ -1,7 +1,10 @@
 import WebSocket from "ws";
-import { readFileSync } from "fs";
-import { siteFiles } from "../_files";
-import { load } from "js-yaml";
+import { readFileSync, writeFileSync } from "fs";
+import { novelFiles, siteFiles } from "../_files";
+import { load, dump } from "js-yaml";
+import * as markdown from "markdown-wasm";
+import { NodeHtmlMarkdown } from "node-html-markdown";
+// import TurndownService from "turndown";
 
 export function initializeGUIServer() {
   console.log("...\n");
@@ -19,6 +22,7 @@ export function initializeGUIServer() {
         console.log("incoming:", data);
 
         if (data.type === "FETCH") fetchFile(ws, data.file);
+        if (data.type === "SAVE") saveFile(ws, data.file, data.data);
       } catch (error) {
         console.error(error);
       }
@@ -28,16 +32,39 @@ export function initializeGUIServer() {
 
 async function fetchFile(ws: WebSocket, file: string) {
   let data;
-  let path = "";
+  let filePath = "";
   let novel = "";
-  if (file.split("/").length > 2) {
+  if (file.split("/").length > 1) {
     [novel, file] = file.split("/");
   }
 
   if (novel) {
+    filePath = novelFiles(novel)[file];
   } else {
-    data = load(readFileSync(siteFiles()[file], "utf-8"));
+    filePath = siteFiles()[file];
   }
+  data =
+    file !== "synopsis"
+      ? load(readFileSync(filePath, "utf-8"))
+      : markdown.parse(readFileSync(filePath, "utf-8"));
 
   ws.send(JSON.stringify({ type: "FETCH", file, data }));
+}
+
+async function saveFile(ws: WebSocket, file: string, data2: any) {
+  let data1;
+  let filePath = "";
+  let novel = "";
+  if (file.split("/").length > 1) {
+    [novel, file] = file.split("/");
+  }
+
+  if (novel) {
+    filePath = novelFiles(novel)[file];
+  } else {
+    filePath = siteFiles()[file];
+  }
+  data1 = load(readFileSync(filePath, "utf-8"));
+  const newData = file !== "synopsis" ? dump({ ...data1, ...data2 }) : NodeHtmlMarkdown.translate(data2);
+  writeFileSync(filePath, newData, "utf-8");
 }
