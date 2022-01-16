@@ -1,6 +1,7 @@
 import WebSocket from "ws";
 import { saveFile, fetchFile, pullUIData } from "./fetch-data";
 import { createNovelFromGUI } from "./novel";
+import { runCommand } from "./utils";
 
 export function initializeGUIServer() {
   console.log("...\n");
@@ -21,6 +22,7 @@ export function initializeGUIServer() {
         if (data.type === "FETCH") fetchFile(ws, data.file);
         if (data.type === "SAVE") saveFile(data.file, data.data);
         if (data.type === "CREATENOVEL") createNovelFromGUI(ws, data.novel);
+        if (data.type === "COMMAND") runCommand(ws, data.task);
       } catch (error) {
         console.error(error);
       }
