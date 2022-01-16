@@ -50,22 +50,22 @@ export async function saveFile(file: string, data2: any) {
 }
 
 export async function pullUIData(): Promise<{
-  [novel: string]: {
-    info: any;
-    banner: Uint8Array;
-  };
+  siteMetadata: any;
+  novelsMetadata: any;
 }> {
-  let data = {};
+  let novelsMetadata = {};
 
   for await (const file of await glob("novels/*/info.{yml,yaml}")) {
     const novel = dirname(file).split("/").pop();
     const info = load(await readFile(file, "utf-8")) as any;
     const bannerFile = (await glob(`novels/${novel}/cover.{webp,jpg,jpeg,png}`))[0];
     const ext = bannerFile.split(".")[1];
-    data[novel] = {
+    novelsMetadata[novel] = {
       ...info,
       cover: `data:image/${ext};base64,${await readFile(bannerFile, "base64")}`,
     };
   }
-  return data;
+
+  const siteMetadata = load(await readFile(siteFiles().settings, "utf-8"));
+  return { novelsMetadata, siteMetadata };
 }
