@@ -42,7 +42,7 @@ export default [
       sourcemap: true,
     },
     // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
-    external: ["sharp", "node-html-markdown"],
+    external: ["sharp", "node-html-markdown", "promisify-child-process"],
     cache: true,
     watch: {
       include: ".prognovel/**",
