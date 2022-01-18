@@ -12,7 +12,7 @@ Use dash "-" to separate words instead of space.`);
   }
   let settings;
   try {
-    settings = load(readFileSync(siteFiles().settings), "utf-8");
+    settings = load(readFileSync(siteFiles().settings, "utf-8"));
   } catch (_) {
     errorSiteSettingsNotFound();
   }
@@ -55,7 +55,7 @@ const novelConfigFiles = {
   "synopsis.md": `This is an example of novel synopsis. This will appear in novel page later.
   
 You can use markdown format here. Happy writing!`,
-  "info.yml": `title: Awesome Fantasy Novel
+  "info.yml": `title: New Novel
 author: Hipster Author
 contact: example@email.com
 demographic: seinen

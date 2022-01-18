@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 const CF_API_BASE_ENDPOINT = "https://api.cloudflare.com/client/v4/";
 const { CF_ACCOUNT_ID, CF_NAMESPACE_ID, CF_API_TOKEN } = process.env;
+const { failBuild } = require("../../.prognovel/.dist/fail");
 
 function cfWorkerKV() {
   return {
@@ -22,14 +23,17 @@ function cfWorkerKV() {
         if (!json.success) {
           failBuild(
             `Failed to upload to Cloudflare server. 
-    Make sure you set the environment secrets in .env file correctly`,
+  Make sure you set the environment secrets in .env file correctly.
+  
+  Follow instruction in https://github.com/prognoveljs/prognovel-cli
+  for more information.`,
             "upload failed",
           );
         }
       } catch (error) {
         failBuild(
           `Failed to upload to Cloudflare server. 
-  Make sure you set the environment secrets in .env file correctly`,
+          Make sure you set the environment secrets in .env file correctly`,
           "upload failed",
         );
       }

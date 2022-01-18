@@ -9,12 +9,12 @@ export function checkValidBookFolder(novel: string) {
   let settings;
   let novelMetadata;
   try {
-    settings = yaml.load(fs.readFileSync(siteFiles().settings));
+    settings = yaml.load(fs.readFileSync(siteFiles().settings, "utf-8"));
   } catch (_) {
     errorSiteSettingsNotFound();
   }
   try {
-    novelMetadata = yaml.load(fs.readFileSync(novelFiles(novel).info));
+    novelMetadata = yaml.load(fs.readFileSync(novelFiles(novel).info, "utf-8"));
   } catch (_) {
     errorNovelInfoNotFound(novel);
   }
