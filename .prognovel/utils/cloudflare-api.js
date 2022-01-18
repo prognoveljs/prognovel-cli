@@ -33,7 +33,7 @@ function cfWorkerKV() {
       } catch (error) {
         failBuild(
           `Failed to upload to Cloudflare server. 
-  Make sure you set the environment secrets in .env file correctly`,
+          Make sure you set the environment secrets in .env file correctly`,
           "upload failed",
         );
       }

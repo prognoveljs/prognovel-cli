@@ -6,6 +6,7 @@ import { NodeHtmlMarkdown } from "node-html-markdown";
 import { WebSocket } from "ws";
 import { dirname } from "path";
 import glob from "tiny-glob";
+import { runCommand } from "./utils";
 
 const { readFile, writeFile } = promises;
 
@@ -31,7 +32,7 @@ export async function fetchFile(ws: WebSocket, file1: string) {
   ws.send(JSON.stringify({ type: "FETCH", file: file1, data }));
 }
 
-export async function saveFile(file: string, data2: any) {
+export async function saveFile(ws: WebSocket, file: string, data2: any) {
   let data1;
   let filePath = "";
   let novel = "";
@@ -44,9 +45,14 @@ export async function saveFile(file: string, data2: any) {
   } else {
     filePath = siteFiles()[file];
   }
-  data1 = load(await readFile(filePath, "utf-8"));
-  const newData = file !== "synopsis" ? dump({ ...data1, ...data2 }) : NodeHtmlMarkdown.translate(data2);
-  await writeFile(filePath, newData, "utf-8");
+  if (file === "env") {
+    await writeFile(filePath, data2, "utf-8");
+    runCommand(ws, "publish");
+  } else {
+    data1 = load(await readFile(filePath, "utf-8"));
+    const newData = file !== "synopsis" ? dump({ ...data1, ...data2 }) : NodeHtmlMarkdown.translate(data2);
+    await writeFile(filePath, newData, "utf-8");
+  }
 }
 
 export async function pullUIData(): Promise<{

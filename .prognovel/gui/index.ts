@@ -20,7 +20,7 @@ export function initializeGUIServer() {
         console.log("incoming:", data);
 
         if (data.type === "FETCH") fetchFile(ws, data.file);
-        if (data.type === "SAVE") saveFile(data.file, data.data);
+        if (data.type === "SAVE") saveFile(ws, data.file, data.data);
         if (data.type === "CREATENOVEL") createNovelFromGUI(ws, data.novel);
         if (data.type === "COMMAND") runCommand(ws, data.task);
       } catch (error) {

@@ -25,6 +25,7 @@ export const siteFiles = function (isNew = false): SiteFiles {
   return {
     settings: getYaml(join(process.cwd(), "site-settings.yml"), isNew),
     contributors: getYaml(join(process.cwd(), "site-contributors.yml"), isNew),
+    env: join(process.cwd(), ".env"),
   };
 };
 
@@ -78,6 +79,7 @@ function getYaml(file: string, isNew = false) {
 interface SiteFiles {
   settings: string;
   contributors: string;
+  env: string;
 }
 
 interface PublishFiles {

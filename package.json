@@ -1,6 +1,6 @@
 {
   "name": "@prognovel/cli",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "A repo to manage contents of ProgNovel platform.",
   "main": ".prognovel/bin",
   "bin": {
