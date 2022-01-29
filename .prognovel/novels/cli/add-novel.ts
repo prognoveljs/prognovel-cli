@@ -56,7 +56,7 @@ const novelConfigFiles = {
   
 You can use markdown format here. Happy writing!`,
   "info.yml": `title: New Novel
-author: Hipster Author
+author: AuthorName
 contact: example@email.com
 demographic: seinen
 genre: fantasy, drama, comedy
@@ -97,8 +97,11 @@ Wowee: $ilp.uphold.com/QkG86UgXzKq8 # ILP address - Defold Foundation
 const chapterTemplate = `---
 title: A Chapter Title
 monetized: false
-author: AuthorName
 editor: EditorName
 ---
 
-Bla bla bla bla the story goes here bla bla bla...`;
+Bla bla bla bla the story goes here bla bla bla...
+
+New paragraph goes here...
+
+Bla bla bla,...`;

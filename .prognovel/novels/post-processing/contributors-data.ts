@@ -7,13 +7,20 @@ export function generateContributorData(chapterData: any, novel: string): Chapte
   let { contributors, title, body, monetization, banner } = chapterData;
   const config = novelFiles(novel).contributorsConfig;
   const contributorData = load(readFileSync(config, "utf-8"));
+  const novelData: any = load(readFileSync(novelFiles(novel).info, "utf-8"));
 
   return {
     title,
     body,
     monetization,
     banner,
-    contributors: Object.keys(contributors).reduce((prev, cur) => {
+    contributors: generateContributors(),
+  };
+  function generateContributors() {
+    if (!(contributors && contributors.author)) {
+      contributors.author = novelData.author;
+    }
+    return Object.keys(contributors).reduce((prev, cur) => {
       if (contributors[cur])
         prev[cur] = contributors[cur]
           .split(",")
@@ -33,6 +40,6 @@ export function generateContributorData(chapterData: any, novel: string): Chapte
           });
 
       return prev;
-    }, {}),
-  };
+    }, {});
+  }
 }
