@@ -17,5 +17,6 @@ require("yargs")
   .command(require("./new"))
   .command(require("./novel"))
   .command(require("./gui"))
+  .command(require("./clear-cache"))
   .command(require("./fix-typo"))
   .command(require("./check")).argv;
