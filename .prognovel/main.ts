@@ -9,6 +9,7 @@ import { pickImage } from "./utils/image";
 import { novelFiles, publishFiles, siteFiles } from "./_files";
 import { addNovel } from "./novels/cli/add-novel";
 import { initializeGUIServer } from "./gui";
+import { generateNews, generateNewsTimestamp } from "./site/generate-news";
 
 async function init(opts?: any) {
   console.log("Initialize on folder:", process.cwd());
@@ -22,6 +23,7 @@ async function build(opts?: any) {
     const novelsMetadata = await generateMetadata(settings.novels);
     const cleanMetadata = novelsMetadata.filter((novel) => JSON.stringify(novel) !== "{}");
     appendNovelsMetadata(cleanMetadata);
+    await generateNews();
   } catch (err) {
     failBuild([err], "unexpected error!", { label: "crash" });
   }
@@ -40,6 +42,8 @@ export {
   novelFiles,
   publishFiles,
   initializeGUIServer,
+  generateNews,
+  generateNewsTimestamp,
 };
 
 // init();

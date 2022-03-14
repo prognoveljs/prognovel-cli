@@ -8,6 +8,7 @@ export const publishFiles = function (isNew = false): PublishFiles {
     folder: folder,
     siteMetadata: join(folder, "sitemetadata.json"),
     fullMetadata: join(folder, "fullmetadata.json"),
+    news: join(folder, "news.json"),
     novelFolder: (id: NovelID) => join(folder, id),
     novelMetadata: (id: NovelID) => join(folder, id, `metadata.json`),
     novelChapterTitles: (id: NovelID) => join(folder, id, "chapter-titles.json"),
@@ -86,6 +87,7 @@ interface PublishFiles {
   folder: string;
   fullMetadata: string;
   siteMetadata: string;
+  news: string;
   novelFolder: (novel: NovelID) => string;
   novelMetadata: (novel: NovelID) => string;
   novelChapterTitles: (novel: NovelID) => string;

@@ -22,8 +22,8 @@ function cfWorkerKV() {
         console.log(`Uploading ${key} is ${json.success ? "sucess" : "failed"}`);
         if (!json.success) {
           failBuild(
-            `Failed to upload to Cloudflare server. 
-  Make sure you set the environment secrets in .env file correctly.
+            `Failed to upload to Cloudflare server. Try again or
+  make sure you set the environment secrets in .env file correctly.
   
   Follow instruction in https://github.com/prognoveljs/prognovel-cli
   for more information.`,

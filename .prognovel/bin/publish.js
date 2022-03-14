@@ -9,7 +9,7 @@ try {
 } catch (error) {
   // fail();
 }
-const { pickImage } = main;
+const { pickImage, generateNewsTimestamp } = main;
 const imageType = require("image-type");
 const fetch = require("node-fetch");
 exports.command = "publish";
@@ -70,8 +70,9 @@ exports.handler = async function (argv) {
     }
   }
 
-  const metadata = readFileSync(".publish/fullmetadata.json", "utf-8");
-  post.push(cfWorkerKV().put("metadata", metadata));
+  const metadata = JSON.parse(readFileSync(".publish/fullmetadata.json", "utf-8"));
+  metadata.news = await generateNewsTimestamp(JSON.parse(readFileSync(".publish/news.json", "utf-8")));
+  post.push(cfWorkerKV().put("metadata", JSON.stringify(metadata)));
 
   novels.forEach((novel) => {
     const data = readFileSync(`.publish/${novel}/data.txt`, "utf-8");
