@@ -12,7 +12,7 @@ const { fail } = require("./_errors");
 
 exports.handler = function (argv) {
   try {
-    require("../.dist/main").check();
+    require("../.dist/main").generateNews();
   } catch (error) {
     fail();
   }
