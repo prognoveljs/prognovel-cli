@@ -48,7 +48,7 @@
     "polka": "^0.5.2",
     "promisify-child-process": "^4.1.1",
     "readline-promise": "^1.0.5",
-    "sharp": "^0.28.3",
+    "sharp": "^0.30.4",
     "source-map-support": "^0.5.21",
     "string-similarity": "^4.0.4",
     "tiny-glob": "^0.2.9",
