@@ -5,6 +5,11 @@ import { publishFiles, novelFiles } from "../_files";
 import { BOOK_COVER } from "../prognovel.config";
 import { ensurePublishDirectoryExist } from "../utils/check-valid-book-folder";
 
+/**
+ * GENERATING COVER IN CLI IS OBSOLETE
+ * Frontend app already does that during site build
+ */
+
 const { sizes, formats } = BOOK_COVER;
 
 export async function generateBookCover(novel: string, placeholderRatio = 1) {

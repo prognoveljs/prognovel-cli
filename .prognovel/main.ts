@@ -11,6 +11,8 @@ import { addNovel } from "./novels/cli/add-novel";
 import { initializeGUIServer } from "./gui";
 import { generateNews, generateNewsTimestamp } from "./site/generate-news";
 
+export const IS_STATIC = process.env.CF_PAGES;
+
 async function init(opts?: any) {
   console.log("Initialize on folder:", process.cwd());
 }
