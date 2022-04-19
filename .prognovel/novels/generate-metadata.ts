@@ -12,8 +12,10 @@ import { contributors, calculateContributors, contributionRoles } from "./contri
 import brotli from "brotli";
 import { outputMessage, benchmark } from "./metadata/logging";
 import { cacheFiles, novelFiles, publishFiles } from "../_files";
-import { lstatSync } from "fs";
+import { lstatSync, existsSync, mkdirSync } from "fs";
 import { applyNovelChanges } from "./metadata/apply-change";
+import { join } from "path";
+import { IS_STATIC } from "../main";
 
 export async function generateMetadata(novels: string[]) {
   const firstNovel = novels[0];
@@ -119,15 +121,21 @@ async function compileChapter(folder: string, images, novel: string) {
 }
 
 function generateFiles({ novel, meta, chapterTitles, content, cache }) {
-  const data = {
-    metadata: JSON.stringify(meta),
-    chapterTitles: JSON.stringify(chapterTitles),
-    content: JSON.stringify(content),
-  };
   const bin = { metadata: meta, chapterTitles, content };
-  fs.writeFileSync(publishFiles().novelMetadata(novel), JSON.stringify(meta, null, 4));
-  fs.writeFileSync(publishFiles().novelChapterTitles(novel), JSON.stringify(chapterTitles));
   fs.writeFileSync(cacheFiles().novelCompileCache(novel), JSON.stringify(cache || {}), "utf-8");
-  fs.writeFileSync(publishFiles().novelCompiledContent(novel), JSON.stringify(content));
-  fs.writeFileSync(publishFiles().novelBinary(novel), JSON.stringify(bin));
+  if (IS_STATIC) {
+    // generate .json files
+    Object.keys(content).forEach((chapterIndex) => {
+      const dest = join(publishFiles().novelFolder(novel), chapterIndex) + ".json";
+      const destFolder = join(dest, "..");
+      if (!existsSync(destFolder)) mkdirSync(destFolder, { recursive: true });
+      fs.writeFileSync(dest, JSON.stringify(content[chapterIndex]), "utf-8");
+    });
+    fs.writeFileSync(join(publishFiles().folder, "_redirects"), `/ /sitemetadata.json 200`, "utf-8");
+  } else {
+    fs.writeFileSync(publishFiles().novelMetadata(novel), JSON.stringify(meta, null, 4));
+    fs.writeFileSync(publishFiles().novelChapterTitles(novel), JSON.stringify(chapterTitles));
+    fs.writeFileSync(publishFiles().novelCompiledContent(novel), JSON.stringify(content));
+    fs.writeFileSync(publishFiles().novelBinary(novel), JSON.stringify(bin));
+  }
 }

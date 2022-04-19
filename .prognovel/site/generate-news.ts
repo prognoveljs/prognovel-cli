@@ -3,6 +3,7 @@ import { promises } from "fs";
 import * as markdown from "markdown-wasm";
 import fm from "front-matter";
 import { publishFiles } from "../_files";
+import { IS_STATIC } from "../main";
 
 const { readFile, writeFile } = promises;
 
@@ -34,6 +35,25 @@ export async function generateNews() {
   }
 
   await writeFile(publishFiles().news, JSON.stringify(result), "utf-8");
+
+  if (IS_STATIC) {
+    const siteMetadata = JSON.parse(await readFile(publishFiles().siteMetadata, "utf-8"));
+    siteMetadata.news = result
+      ? Object.keys(result)
+          .map((news) => {
+            delete result[news].content;
+            return {
+              id: news,
+              ...result[news],
+            };
+          })
+          .sort((a, b) => {
+            return b.date - a.date;
+          })
+          .slice(0, 3)
+      : [];
+    await writeFile(publishFiles().siteMetadata, JSON.stringify(siteMetadata, null, 2), "utf-8");
+  }
 
   return result;
 }
