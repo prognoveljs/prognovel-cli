@@ -3,6 +3,8 @@ import { failBuild } from "./build/fail";
 import sharp from "sharp";
 import { publishFiles } from "../_files";
 import { join } from "path";
+// import archiver from "archiver";
+import { createWriteStream } from "fs";
 
 export async function generateSiteImages() {
   const allowedImageExt = "{png,jpeg,webp,jpg,bmp}";
@@ -47,5 +49,21 @@ export async function generateNovelImages(novel: string) {
       .toFile(`${join(publishFiles().folder, novel, image + ".png")}`);
 
     // post.push(cfWorkerKV().put(`image:${novel}:${image}`, buffer));
+  });
+}
+
+export async function zipDirectory(source, out) {
+  const archiver = (await import("archiver")).default;
+  const archive = archiver("zip", { zlib: { level: 9 } });
+  const stream = createWriteStream(out);
+
+  return new Promise((resolve, reject) => {
+    archive
+      .directory(source, false)
+      .on("error", (err) => reject(err))
+      .pipe(stream);
+
+    stream.on("close", () => resolve(""));
+    archive.finalize();
   });
 }

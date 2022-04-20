@@ -82,8 +82,8 @@ exports.handler = async function (argv) {
   post.push(
     new Promise(async (resolve, reject) => {
       try {
-        const out = ".publish/components.zip";
-        await zipDirectory("components", out);
+        // const out = ".publish/components.zip";
+        // await zipDirectory("components", out);
         await cfWorkerKV().put(`data:components.zip`, readFileSync(out));
         resolve();
       } catch (error) {
