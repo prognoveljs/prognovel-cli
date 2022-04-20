@@ -6,6 +6,7 @@ import { ensurePublishDirectoryExist } from "../utils/check-valid-book-folder";
 import { publishFiles, siteFiles } from "../_files";
 import { getSiteContributors } from "./site-contributors-data";
 import { join } from "path";
+import { generateSiteImages } from "../utils/generate-static-image";
 
 export function generateSiteSettings() {
   let settings: any;
@@ -29,7 +30,7 @@ export function generateSiteSettings() {
   ensurePublishDirectoryExist();
   fs.writeFileSync(publishFiles().siteMetadata, JSON.stringify(settings, null, 4));
   fs.writeFileSync(join(publishFiles().folder, "_redirects"), `/ /sitemetadata.json 200`, "utf-8");
-
+  generateSiteImages();
   contributionRoles.set(settings.contribution_roles);
   revSharePerChapter.set(settings["rev_share_contribution_per_chapter"]);
 
