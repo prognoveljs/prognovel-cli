@@ -71,6 +71,22 @@ m4naG3R:
   payment: $ilp.uphold.com/edR8erBDbRyq
   rate: 22
 `,
+  "package.json": `{
+  "name": "prognovel-content",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "prognovel build"
+  },
+  "dependencies": {
+    "@prognovel/cli": "^0.8.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+`,
 };
 
 const githubActionContent = {
