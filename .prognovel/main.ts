@@ -10,7 +10,8 @@ import { novelFiles, publishFiles, siteFiles } from "./_files";
 import { addNovel } from "./novels/cli/add-novel";
 import { initializeGUIServer } from "./gui";
 import { generateNews, generateNewsTimestamp } from "./site/generate-news";
-
+import env from "dotenv";
+env.config();
 export const IS_STATIC = process.env.CF_PAGES;
 
 async function init(opts?: any) {

@@ -131,7 +131,7 @@ function generateFiles({ novel, meta, chapterTitles, content, cache }) {
       if (!existsSync(destFolder)) mkdirSync(destFolder, { recursive: true });
       fs.writeFileSync(dest, JSON.stringify(content[chapterIndex]), "utf-8");
     });
-    fs.writeFileSync(join(publishFiles().folder, "_redirects"), `/ /sitemetadata.json 200`, "utf-8");
+    fs.writeFileSync(publishFiles().novelMetadata(novel), JSON.stringify(meta, null, 4));
   } else {
     fs.writeFileSync(publishFiles().novelMetadata(novel), JSON.stringify(meta, null, 4));
     fs.writeFileSync(publishFiles().novelChapterTitles(novel), JSON.stringify(chapterTitles));
