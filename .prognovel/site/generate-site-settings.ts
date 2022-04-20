@@ -6,7 +6,7 @@ import { ensurePublishDirectoryExist } from "../utils/check-valid-book-folder";
 import { publishFiles, siteFiles } from "../_files";
 import { getSiteContributors } from "./site-contributors-data";
 import { join } from "path";
-import { generateSiteImages } from "../utils/generate-static-image";
+import { generateSiteImages, zipDirectory } from "../utils/generate-static-assets";
 
 export function generateSiteSettings() {
   let settings: any;
@@ -31,6 +31,14 @@ export function generateSiteSettings() {
   fs.writeFileSync(publishFiles().siteMetadata, JSON.stringify(settings, null, 4));
   fs.writeFileSync(join(publishFiles().folder, "_redirects"), `/ /sitemetadata.json 200`, "utf-8");
   generateSiteImages();
+  const out = ".publish/components.zip";
+  try {
+    zipDirectory("components", out);
+  } catch (error) {
+    console.log("error zipping components!");
+    console.log(error);
+  }
+
   contributionRoles.set(settings.contribution_roles);
   revSharePerChapter.set(settings["rev_share_contribution_per_chapter"]);
 

@@ -120,7 +120,7 @@ async function compileChapter(folder: string, images, novel: string) {
   });
 }
 
-import { generateNovelImages } from "../utils/generate-static-image";
+import { generateNovelImages } from "../utils/generate-static-assets";
 function generateFiles({ novel, meta, chapterTitles, content, cache }) {
   const bin = { metadata: meta, chapterTitles, content };
   fs.writeFileSync(cacheFiles().novelCompileCache(novel), JSON.stringify(cache || {}), "utf-8");
