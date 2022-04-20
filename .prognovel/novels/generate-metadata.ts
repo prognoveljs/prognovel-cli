@@ -120,6 +120,7 @@ async function compileChapter(folder: string, images, novel: string) {
   });
 }
 
+import { generateNovelImages } from "../utils/generate-static-image";
 function generateFiles({ novel, meta, chapterTitles, content, cache }) {
   const bin = { metadata: meta, chapterTitles, content };
   fs.writeFileSync(cacheFiles().novelCompileCache(novel), JSON.stringify(cache || {}), "utf-8");
@@ -132,6 +133,7 @@ function generateFiles({ novel, meta, chapterTitles, content, cache }) {
       fs.writeFileSync(dest, JSON.stringify(content[chapterIndex]), "utf-8");
     });
     fs.writeFileSync(publishFiles().novelMetadata(novel), JSON.stringify(meta, null, 4));
+    generateNovelImages(novel);
   } else {
     fs.writeFileSync(publishFiles().novelMetadata(novel), JSON.stringify(meta, null, 4));
     fs.writeFileSync(publishFiles().novelChapterTitles(novel), JSON.stringify(chapterTitles));

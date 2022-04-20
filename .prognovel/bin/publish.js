@@ -112,7 +112,7 @@ exports.handler = async function (argv) {
 
 exports.describe = "Push generated content to Cloudflare KV Workers.";
 
-async function uploadSiteImages() {
+async function uploadSiteImages(static = false) {
   const post = [];
   const allowedImageExt = "{png,jpeg,webp,jpg,bmp}";
   const siteImages = {
@@ -134,7 +134,7 @@ async function uploadSiteImages() {
   return post;
 }
 
-async function uploadNovelImages(novel) {
+async function uploadNovelImages(novel, static = false) {
   const post = [];
   const allowedImageExt = "{png,jpeg,webp,jpg,bmp}";
   const novelImages = {
