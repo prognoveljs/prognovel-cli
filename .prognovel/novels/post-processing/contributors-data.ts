@@ -4,16 +4,13 @@ import { readFileSync } from "fs";
 import type { ChapterData } from "./chapter";
 
 export function generateContributorData(chapterData: any, novel: string): ChapterData {
-  let { contributors, title, body, monetization, banner } = chapterData;
+  let { contributors } = chapterData;
   const config = novelFiles(novel).contributorsConfig;
   const contributorData = load(readFileSync(config, "utf-8"));
   const novelData: any = load(readFileSync(novelFiles(novel).info, "utf-8"));
 
   return {
-    title,
-    body,
-    monetization,
-    banner,
+    ...chapterData,
     contributors: generateContributors(),
   };
   function generateContributors() {

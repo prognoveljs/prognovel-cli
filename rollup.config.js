@@ -10,7 +10,7 @@ import { markdownWasmOutput } from "./.prognovel/utils/wasm";
 // import builtins from "rollup-plugin-node-builtins";
 // import sourcemap from "rollup-plugin-sourcemaps";
 
-const pkg = require("./package.json");
+// const pkg = require("./package.json");
 
 const extensions = [".js", ".jsx", ".ts", ".tsx"];
 const plugins = [
