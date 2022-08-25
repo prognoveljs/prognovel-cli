@@ -139,5 +139,6 @@ function generateFiles({ novel, meta, chapterTitles, content, cache }) {
     fs.writeFileSync(publishFiles().novelChapterTitles(novel), JSON.stringify(chapterTitles));
     fs.writeFileSync(publishFiles().novelCompiledContent(novel), JSON.stringify(content));
     fs.writeFileSync(publishFiles().novelBinary(novel), JSON.stringify(bin));
+    // console.log(content);
   }
 }

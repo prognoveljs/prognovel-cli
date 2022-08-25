@@ -135,6 +135,7 @@ export async function parseMarkdown(
     content[name].body = cache[file].body;
     content[name].title = cache[file].data.title || name;
     content[name].monetization = cache[file].data.monetization || false;
+    content[name].spoiler = cache[file].data.spoiler || false;
     content[name].contributors = contributionRoles.get().reduce((prev, cur) => {
       prev[cur] = cache[file].data[cur] || "";
       return prev;
