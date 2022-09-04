@@ -149,7 +149,10 @@ export async function parseMarkdown(
     unregistered = [];
 
     if (!chapterTitles?.[book]) chapterTitles[book] = {};
-    chapterTitles[book]["chapter-" + index] = (frontmatter.attributes as any).title || "chapter-" + index;
+    let titlePrefix = content[name].spoiler ? "$" : "";
+    chapterTitles[book]["chapter-" + index] = (frontmatter.attributes as any).title
+      ? titlePrefix + (frontmatter.attributes as any).title
+      : "chapter-" + index;
     chapters.push(book + "/chapter-" + index);
 
     for (const { name } of contributors.getNovelContributors(novel)) {
