@@ -7,6 +7,7 @@ const {
   siteContributorsContent,
   siteFilesContent,
   components,
+  news,
 } = require("./_new-files");
 const { join, resolve } = require("path");
 
@@ -48,6 +49,13 @@ exports.handler = async function ({ _ }) {
       Object.keys(components[key]).forEach((file) => {
         writeFileSync(join(folder, file), components[key][file], "utf-8");
       });
+    }
+  } catch (error) {}
+  try {
+    const newsFolder = join(basePath, "news");
+    if (!existsSync(newsFolder)) mkdirSync(newsFolder);
+    for (const file in news) {
+      writeFileSync(join(newsFolder, file), news[file], "utf-8");
     }
   } catch (error) {}
   Object.keys(siteFilesContent).forEach((file) => {

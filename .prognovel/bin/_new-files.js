@@ -80,7 +80,7 @@ m4naG3R:
     "build": "prognovel build"
   },
   "dependencies": {
-    "@prognovel/cli": "^0.8.5"
+    "@prognovel/cli": "^0.8.7"
   },
   "keywords": [],
   "author": "",
@@ -131,8 +131,21 @@ const components = {
   `,
   },
 };
+
+const news = {
+  "hello-world.md": `---
+title: Hello world
+author: Admin
+---
+
+Hello world!
+
+Very excited to get the app live!
+`,
+};
 module.exports = {
   siteFilesContent,
   githubActionContent,
   components,
+  news,
 };
