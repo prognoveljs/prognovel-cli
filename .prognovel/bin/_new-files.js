@@ -80,7 +80,7 @@ m4naG3R:
     "build": "prognovel build"
   },
   "dependencies": {
-    "@prognovel/cli": "^0.8.7"
+    "@prognovel/cli": "^${require("../../package.json").version}"
   },
   "keywords": [],
   "author": "",
